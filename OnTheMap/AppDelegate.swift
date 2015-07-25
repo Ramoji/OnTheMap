@@ -25,6 +25,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
+        // TODO: remove this test code
+        let dictionary = [
+            "uniqueKey" : "1234",
+            "firstName" : "AAA",
+            "lastName" : "Autosupply",
+            "mapString" : "San Carlos, CA",
+            "mediaURL" : "https://udacity.com",
+            "latitude" : 37.495501,
+            "longitude" : -122.2668
+        ]
+        let loc = StudentLocation(dictionary: dictionary)
+        RESTClient.sharedInstance().postStudentLocationToParse(loc) {result, error in
+            if error == nil {
+                println("successfully posted StudentLocation to Parse")
+            } else {
+                println("error posting StudentLocation to Parse")
+            }
+        }
+        
         return true
     }
 
@@ -63,6 +82,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     
                     // Send a notification indicating new student location data has been obtained from Parse.
                     NSNotificationCenter.defaultCenter().postNotificationName(self.studentLocationsUpdateNotificationKey, object: self)
+                    
+                    println("new student location data: \(array)")
                 }
             }
             else {

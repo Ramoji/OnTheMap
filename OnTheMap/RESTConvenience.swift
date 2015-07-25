@@ -65,10 +65,94 @@ extension RESTClient {
     
     // MARK: POST Convenience Methods
 
-    /* 
+    /*
+        @brief Post user's location to Parse.
+        @return void
+        completion handler:
+            result Contains true if post was successful, else it contains false if an error occurred.
+            error  An error if something went wrong, else nil.
+    */
+    func postStudentLocationToParse(studentLocation: StudentLocation, completionHandler: (result: Bool, error: NSError?) -> Void) {
+       
+        /* 1. Specify parameters, method (if has {key}) */
+//        var parameters = [
+//            "limit" : "100"
+//        ]
+        
+        // specify base URL
+        let baseURL = "https://api.parse.com/" //Constants.parseBaseURL
+        
+        // specify method
+        var mutableMethod : String = "1/classes/StudentLocation" // Methods.udacitySessionMethod
+        
+        // set up http header parameters
+        let headerParms = [
+            "QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr" : "X-Parse-Application-Id",
+            "QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY" : "X-Parse-REST-API-Key"
+        ]
+        
+        /* HTTP body
+            {
+                "uniqueKey" : "1234", 
+                "firstName" : "Johnny",
+                "lastName" : "Appleseed",
+                "mapString" : "San Carlos, CA",
+                "mediaURL" : "https://udacity.com",
+                "latitude" : 37.4955,
+                "longitude" : -122.2668
+            }
+        */
+
+        // create the HTTP body
+// TODO: remove this test code
+//        let jsonBody : [String: AnyObject] = [
+//            "uniqueKey" : "1234",
+//            "firstName" : "John",
+//            "lastName" : "Doe",
+//            "mapString" : "Mountain View, CA",
+//            "mediaURL" : "https://udacity.com",
+//            "latitude" : 37.386052,
+//            "longitude" : -122.083851
+//        ]
+// TODO: enable parameterized values.
+        let jsonBody : [String: AnyObject] = [
+            "uniqueKey" : studentLocation.uniqueKey,
+            "firstName" : studentLocation.firstName,
+            "lastName" : studentLocation.lastName,
+            "mapString" : studentLocation.mapString,
+            "mediaURL" : studentLocation.mediaURL,
+            "latitude" : studentLocation.latitude,
+            "longitude" : studentLocation.longitude
+        ]
+        
+        /* 2. Make the request */
+        let task = taskForPOSTMethod(apiKey: "", baseUrl: baseURL, method: mutableMethod, headerParameters: headerParms, queryParameters: nil, jsonBody: jsonBody) { JSONResult, error in
+            
+            /* 3. Send the desired value(s) to completion handler */
+            if let error = error {
+                completionHandler(result: false, error: error)
+            } else {
+                // parse the json response which looks like the following:
+                /*
+                    {
+                        "createdAt":"2015-03-11T02:48:18.321Z",
+                        "objectId":"CDHfAy8sdp"
+                    }
+                */
+                if let dictionary = JSONResult.valueForKey("objectId") as? String {
+                    completionHandler(result: true, error: nil)
+                } else {
+                    completionHandler(result: false, error: NSError(domain: "postToFavoritesList parsing", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not parse postToFavoritesList"]))
+                }
+            }
+        }
+    }
+
+    
+    /*
         @brief Login to Udacity.
         @return void
-            completion handler: 
+            completion handler:
                 result Contains true if login was successful, else it contains false if an error occurred.
                 error  An error if something went wrong, else nil.
     */
@@ -97,7 +181,7 @@ extension RESTClient {
         ]
         
         /* 2. Make the request */
-        let task = taskForPOSTMethod(apiKey: "", baseUrl: baseURL, method: mutableMethod, parameters: nil, jsonBody: jsonBody) { JSONResult, error in
+        let task = taskForPOSTMethod(apiKey: "", baseUrl: baseURL, method: mutableMethod, headerParameters: nil, queryParameters: nil, jsonBody: jsonBody) { JSONResult, error in
             
             /* 3. Send the desired value(s) to completion handler */
             if let error = error {
@@ -128,6 +212,7 @@ extension RESTClient {
             }
         }
     }
+    
     /* 
         @brief logout of a Udacity session.
     */
@@ -168,7 +253,5 @@ extension RESTClient {
         }
         task.resume()
     }
-    
-    //TODO - register maile for fall soccer
 }
     

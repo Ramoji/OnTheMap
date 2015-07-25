@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import CoreLocation
+import MapKit
 
 class InfoPostingProvideLocationViewController: UIViewController {
 
@@ -35,8 +37,25 @@ class InfoPostingProvideLocationViewController: UIViewController {
     */
 
     @IBAction func onCancelButtonTap(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     @IBAction func findOnMapButtonTap(sender: AnyObject) {
+        if let text = locationTextField.text {
+            forwardGeoCodeLocation(text)
+        }
+    }
+    
+    func forwardGeoCodeLocation(location: String) {
+        var geoCoder = CLGeocoder()
+        geoCoder.geocodeAddressString(location) { placemarks, error in
+            if let placemark = placemarks?[0] as? CLPlacemark {
+                
+                println("placemark = \(placemark)")
+                
+                // TODO: re-enable
+                //self.mapView.addAnnotation(MKPlacemark(placemark: placemark))
+            }
+        }
     }
 }

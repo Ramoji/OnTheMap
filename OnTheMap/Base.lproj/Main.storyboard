@@ -30,7 +30,7 @@
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aiR-uE-2es">
                                 <rect key="frame" x="16" y="302" width="568" height="30"/>
                                 <color key="backgroundColor" red="0.97254901960784312" green="0.80392156862745101" blue="0.38823529411764707" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="textColor" red="0.97254901960784312" green="0.80392156862745101" blue="0.38823529411764707" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="0.97254901959999995" green="0.42352941179999998" blue="0.22352941179999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
@@ -197,10 +197,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mTx-8b-a1p">
+                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jph-96-4Hi">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="185"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
+                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mTx-8b-a1p">
                                 <rect key="frame" x="0.0" y="185" width="600" height="300"/>
                                 <subviews>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Your Location Here" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="h4P-FG-Age">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Your Location Here" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="h4P-FG-Age">
                                         <rect key="frame" x="8" y="17" width="584" height="30"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
@@ -208,20 +212,49 @@
                                     </textField>
                                 </subviews>
                                 <color key="backgroundColor" red="0.54050646619999998" green="0.61395526560000002" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="h4P-FG-Age" firstAttribute="top" secondItem="mTx-8b-a1p" secondAttribute="top" constant="20" id="EVY-eL-MSV"/>
+                                    <constraint firstAttribute="trailing" secondItem="h4P-FG-Age" secondAttribute="trailing" constant="8" id="Usm-5Q-K8c"/>
+                                    <constraint firstAttribute="centerX" secondItem="h4P-FG-Age" secondAttribute="centerX" id="Zky-Rv-xOt"/>
+                                    <constraint firstItem="h4P-FG-Age" firstAttribute="leading" secondItem="mTx-8b-a1p" secondAttribute="leading" constant="8" id="ebq-m1-p8O"/>
+                                </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qly-V8-21v">
-                                <rect key="frame" x="181" y="530" width="238" height="30"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
-                                <state key="normal" title="Find on the Map">
-                                    <color key="titleColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="findOnMapButtonTap:" destination="tP1-XH-7NC" eventType="touchUpInside" id="oPq-PU-IUj"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sO5-br-kyB">
+                            <view alpha="0.20000000298023224" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gxk-gP-C8O">
+                                <rect key="frame" x="0.0" y="486" width="600" height="114"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qly-V8-21v">
+                                        <rect key="frame" x="181" y="42" width="238" height="30"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                        <state key="normal" title="Find on the Map">
+                                            <color key="titleColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="findOnMapButtonTap:" destination="tP1-XH-7NC" eventType="touchUpInside" id="oPq-PU-IUj"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MGU-7H-Owr">
+                                        <rect key="frame" x="253" y="42" width="94" height="30"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                        <state key="normal" title="Submit">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="onSubmitButtonTap:" destination="bLf-YI-gaw" eventType="touchUpInside" id="l0z-KH-GJC"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="Qly-V8-21v" firstAttribute="top" secondItem="gxk-gP-C8O" secondAttribute="top" constant="42" id="KUQ-B6-PIl"/>
+                                    <constraint firstAttribute="centerX" secondItem="Qly-V8-21v" secondAttribute="centerX" id="VCs-VA-NBS"/>
+                                    <constraint firstItem="MGU-7H-Owr" firstAttribute="top" secondItem="gxk-gP-C8O" secondAttribute="top" constant="42" id="rzz-IP-rmU"/>
+                                    <constraint firstAttribute="centerX" secondItem="MGU-7H-Owr" secondAttribute="centerX" id="yaM-it-IrF"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sO5-br-kyB">
                                 <rect key="frame" x="181" y="40" width="238" height="119"/>
                                 <string key="text">Where are you
 studying today?</string>
@@ -229,7 +262,7 @@ studying today?</string>
                                 <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Glb-yZ-AVx">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Glb-yZ-AVx">
                                 <rect key="frame" x="538" y="28" width="48" height="30"/>
                                 <state key="normal" title="Cancel">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -240,6 +273,31 @@ studying today?</string>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="centerX" secondItem="gxk-gP-C8O" secondAttribute="centerX" id="0hV-Xe-z6D"/>
+                            <constraint firstItem="jph-96-4Hi" firstAttribute="top" secondItem="hWi-bT-5sz" secondAttribute="topMargin" id="63A-YK-oGp"/>
+                            <constraint firstAttribute="trailing" secondItem="Glb-yZ-AVx" secondAttribute="trailing" constant="14" id="7j7-Gk-FXL"/>
+                            <constraint firstItem="qM8-zt-f0W" firstAttribute="top" secondItem="gxk-gP-C8O" secondAttribute="bottom" id="A4h-7n-z9U"/>
+                            <constraint firstItem="gxk-gP-C8O" firstAttribute="top" secondItem="mTx-8b-a1p" secondAttribute="bottom" id="G90-dC-pXg"/>
+                            <constraint firstItem="mTx-8b-a1p" firstAttribute="top" secondItem="jph-96-4Hi" secondAttribute="bottom" id="JW1-LT-99Z"/>
+                            <constraint firstItem="gxk-gP-C8O" firstAttribute="leading" secondItem="hWi-bT-5sz" secondAttribute="leading" id="ROl-f3-6z5"/>
+                            <constraint firstItem="gxk-gP-C8O" firstAttribute="top" secondItem="mTx-8b-a1p" secondAttribute="bottom" id="ZQ5-qL-Fl2"/>
+                            <constraint firstItem="jph-96-4Hi" firstAttribute="leading" secondItem="hWi-bT-5sz" secondAttribute="leadingMargin" id="cfc-1r-0ag"/>
+                            <constraint firstAttribute="trailing" secondItem="gxk-gP-C8O" secondAttribute="trailing" id="ct4-Rx-5ak"/>
+                            <constraint firstAttribute="trailing" secondItem="mTx-8b-a1p" secondAttribute="trailing" id="mac-fP-elH"/>
+                            <constraint firstAttribute="centerX" secondItem="sO5-br-kyB" secondAttribute="centerX" id="nt1-Uo-V1v"/>
+                            <constraint firstAttribute="centerX" secondItem="mTx-8b-a1p" secondAttribute="centerX" id="qmr-UK-ERS"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="jph-96-4Hi" secondAttribute="trailing" constant="-16" id="t89-vc-TvG"/>
+                            <constraint firstAttribute="centerX" secondItem="jph-96-4Hi" secondAttribute="centerX" id="u22-7a-vml"/>
+                            <constraint firstItem="sO5-br-kyB" firstAttribute="top" secondItem="Sjc-Ds-Hop" secondAttribute="bottom" constant="20" id="xwS-pw-Rx1"/>
+                            <constraint firstItem="Glb-yZ-AVx" firstAttribute="top" secondItem="Sjc-Ds-Hop" secondAttribute="bottom" constant="8" id="zWc-Ej-zom"/>
+                            <constraint firstItem="mTx-8b-a1p" firstAttribute="leading" secondItem="hWi-bT-5sz" secondAttribute="leading" id="zfr-hV-D4K"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="ZQ5-qL-Fl2"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="locationTextField" destination="h4P-FG-Age" id="Q4X-Fz-AcF"/>

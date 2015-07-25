@@ -64,9 +64,6 @@ class RESTClient {
         // configure http header
         var jsonifyError: NSError? = nil
         for (key,value) in headerParameters {
-//            request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
-//            request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
-
             request.addValue(key, forHTTPHeaderField: value as! String)
         }
         
@@ -89,11 +86,11 @@ class RESTClient {
     }
     
     /* Create a task to send an HTTP Post request */
-    func taskForPOSTMethod(#apiKey: String, baseUrl: String, method: String, parameters: [String : AnyObject]?, jsonBody: [String:AnyObject], completionHandler: (result: AnyObject!, error: NSError?) -> Void) -> NSURLSessionDataTask {
+    func taskForPOSTMethod(#apiKey: String, baseUrl: String, method: String, headerParameters: [String : AnyObject]?, queryParameters: [String : AnyObject]?, jsonBody: [String:AnyObject], completionHandler: (result: AnyObject!, error: NSError?) -> Void) -> NSURLSessionDataTask {
         
         /* 1. Set the parameters */
         var mutableParameters = [String : AnyObject]()
-        if let params = parameters {
+        if let params = queryParameters {
             mutableParameters = params
         }
         if apiKey != "" {
@@ -113,6 +110,11 @@ class RESTClient {
         request.HTTPMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        if let headerParameters = headerParameters {
+            for (key,value) in headerParameters {
+                request.addValue(key, forHTTPHeaderField: value as! String)
+            }
+        }
         request.HTTPBody = NSJSONSerialization.dataWithJSONObject(jsonBody, options: nil, error: &jsonifyError)
         
         /* 4. Make the request */

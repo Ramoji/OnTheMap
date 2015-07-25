@@ -73,9 +73,17 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         var controller = storyboard.instantiateViewControllerWithIdentifier("LoginStoryboardID") as! LoginViewController
         self.presentViewController(controller, animated: true, completion: nil);
     }
+
+    func displayInfoPostingViewController() {
+        var storyboard = UIStoryboard (name: "Main", bundle: nil)
+        var controller = storyboard.instantiateViewControllerWithIdentifier("InfoPostingProvideLocationStoryboardID") as! InfoPostingProvideLocationViewController
+        self.presentViewController(controller, animated: true, completion: nil);
+    }
     
     func onPinButtonTap() {
-        createPins()
+        displayInfoPostingViewController()
+        
+        // TODO - remove: createPins()
     }
     
     func onRefreshButtonTap() {

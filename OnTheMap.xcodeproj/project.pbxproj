@@ -20,6 +20,7 @@
 		9E41618D1B62BCFA009A9D30 /* RESTClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E41618C1B62BCFA009A9D30 /* RESTClient.swift */; };
 		9E41618F1B62BDEB009A9D30 /* RESTConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E41618E1B62BDEB009A9D30 /* RESTConstants.swift */; };
 		9E4161921B62CBD2009A9D30 /* RESTConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4161911B62CBD2009A9D30 /* RESTConvenience.swift */; };
+		9E923C9E1B6441DB00F2B0A7 /* StudentLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E923C9D1B6441DB00F2B0A7 /* StudentLocation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,7 @@
 		9E41618C1B62BCFA009A9D30 /* RESTClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RESTClient.swift; sourceTree = "<group>"; };
 		9E41618E1B62BDEB009A9D30 /* RESTConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RESTConstants.swift; sourceTree = "<group>"; };
 		9E4161911B62CBD2009A9D30 /* RESTConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RESTConvenience.swift; sourceTree = "<group>"; };
+		9E923C9D1B6441DB00F2B0A7 /* StudentLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentLocation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 				9E4161851B618A63009A9D30 /* LoginViewController.swift */,
 				9E4161871B6193F5009A9D30 /* InfoPostingProvideLocationViewController.swift */,
 				9E4161891B619406009A9D30 /* InfoPostingMapViewController.swift */,
+				9E923C9D1B6441DB00F2B0A7 /* StudentLocation.swift */,
 			);
 			path = OnTheMap;
 			sourceTree = "<group>";
@@ -250,6 +253,7 @@
 				9E4161861B618A63009A9D30 /* LoginViewController.swift in Sources */,
 				9E4161681B61855D009A9D30 /* ListViewController.swift in Sources */,
 				9E4161641B61855D009A9D30 /* AppDelegate.swift in Sources */,
+				9E923C9E1B6441DB00F2B0A7 /* StudentLocation.swift in Sources */,
 				9E4161661B61855D009A9D30 /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -450,6 +454,7 @@
 				9E4161811B61855D009A9D30 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9E4161821B61855D009A9D30 /* Build configuration list for PBXNativeTarget "OnTheMapTests" */ = {
 			isa = XCConfigurationList;
@@ -458,6 +463,7 @@
 				9E4161841B61855D009A9D30 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
