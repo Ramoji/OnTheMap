@@ -16,11 +16,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     /* An array of dictionaries where each dictionary describes the location of a student.*/
     var studentLocations = [AnyObject]()
     
+    /* A custom NSNotification that indicates updated student location data has been obtained from Parse. */
+    let studentLocationsUpdateNotificationKey =  "com.johnbateman.studentLocationsUpdateNotificationKey"
+
     var window: UIWindow?
-
-
+    
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
         return true
     }
 
@@ -53,9 +57,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         RESTClient.sharedInstance().getStudentLocations() { success, arrayOfLocationDictionaries, errorString in
             if errorString == nil {
                 if let array = arrayOfLocationDictionaries {
-                    let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
-                    delegate.studentLocations = array
-                    println("student locations: \(array)")
+                    
+                    // Update collection of student locations with the new data from Parse.
+                    self.studentLocations = array
+                    
+                    // Send a notification indicating new student location data has been obtained from Parse.
+                    NSNotificationCenter.defaultCenter().postNotificationName(self.studentLocationsUpdateNotificationKey, object: self)
                 }
             }
             else {

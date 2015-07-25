@@ -8,12 +8,15 @@
 
 import UIKit
 
-class ListViewController: UIViewController {
+class ListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
-    var delegate: AppDelegate!
+    var appDelegate: AppDelegate!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // set up table view delegates
+        //TODO
         
         // Additional bar button items
         let refreshButton = UIBarButtonItem(barButtonSystemItem: .Refresh, target: self, action: "onRefreshButtonTap")
@@ -21,7 +24,7 @@ class ListViewController: UIViewController {
         navigationItem.setRightBarButtonItems([refreshButton, pinButton], animated: true)
         
         // get a reference to the app delegate
-        delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     }
 
     override func didReceiveMemoryWarning() {
@@ -41,7 +44,7 @@ class ListViewController: UIViewController {
     
     func onRefreshButtonTap() {
         // refresh the collection of student locations from Parse
-        delegate.getStudentLocations()
+        appDelegate.getStudentLocations()
     }
     
     /* logout of Udacity session */
@@ -56,5 +59,40 @@ class ListViewController: UIViewController {
             }
         }
     }
+    
+    // MARK: Table View Data Source
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return appDelegate.studentLocations.count
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier("ListViewCellID") as! UITableViewCell
+        let studentLocation = appDelegate.studentLocations[indexPath.row] as? [String: AnyObject]
+        
+        // set the cell text
+        var firstName = String(), lastName = String()
+        if let location = studentLocation {
+            firstName = location["firstName"] as! String
+            lastName = location["lastName"] as! String
+        }
+        cell.textLabel!.text = firstName + " " + lastName
+        
+        return cell
+    }
+    
+    // MARK: Table View Delegate
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        // open student's url in Safari browser
+        let studentLocation: [String: AnyObject] = appDelegate.studentLocations[indexPath.row] as! [String : AnyObject]
+        let url = studentLocation["mediaURL"] as! String
+        if let requestUrl = NSURL(string: url) {
+            UIApplication.sharedApplication().openURL(requestUrl)
+        }
+    }
+
 }
 
