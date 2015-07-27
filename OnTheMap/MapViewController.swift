@@ -14,6 +14,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 
     var appDelegate: AppDelegate!
     
+    /* a reference to the studentLocations singleton */
+    let studentLocations = StudentLocations.sharedInstance()
+    
     @IBOutlet weak var mapView: MKMapView!
     
     override func viewDidLoad() {
@@ -35,7 +38,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         super.viewWillAppear(animated)
 
         // Add a notification observer for updates to student location data from Parse.
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onStudentLocationsUpdate", name: appDelegate.studentLocationsUpdateNotificationKey, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onStudentLocationsUpdate", name: studentLocationsUpdateNotificationKey, object: nil)
         
         // Draw the pins now (as it is conceivable that the notification arrived prior to the observer being registered.)
         createPins()
@@ -81,7 +84,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func onRefreshButtonTap() {
         // refresh the collection of student locations from Parse
-        appDelegate.getStudentLocations() { success, errorString in
+        /*TODO: Remove: appDelegate.*/ studentLocations.getStudentLocations() { success, errorString in
             if success == false {
                 if let errorString = errorString {
                     OTMError(viewController:self).displayErrorAlertView("Error retrieving Locations", message: errorString)
@@ -118,19 +121,19 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         var annotations = [MKPointAnnotation]()
         
         // Create an annotation for each location dictionary in studentLocations
-        for dictionary in appDelegate.studentLocations {
+        for location in studentLocations.studentLocations {
             
-            // get latitude and longitude from studentLocation dictionary and save as CCLocationDegree type (a Double type)
-            let lat = CLLocationDegrees(dictionary["latitude"] as! Double)
-            let long = CLLocationDegrees(dictionary["longitude"] as! Double)
+            // get latitude and longitude from studentLocation and save as CCLocationDegree type (a Double type)
+            let lat = CLLocationDegrees(location.latitude as Double)
+            let long = CLLocationDegrees(location.longitude as Double)
             
             // The lat and long are used to create a CLLocationCoordinates2D instance.
             let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
             
             // extract the student name and url from the dictionary
-            let first = dictionary["firstName"] as! String
-            let last = dictionary["lastName"] as! String
-            let url = dictionary["mediaURL"] as! String
+            let first = location.firstName
+            let last = location.lastName
+            let url = location.mediaURL
             
             // Create the annotation, setting the coordinate, title, and subtitle properties
             var annotation = MKPointAnnotation()
@@ -141,6 +144,29 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             // Add annotation to the annotations collection.
             annotations.append(annotation)
         }
+//        for dictionary in appDelegate.studentLocations {
+//            
+//            // get latitude and longitude from studentLocation dictionary and save as CCLocationDegree type (a Double type)
+//            let lat = CLLocationDegrees(dictionary["latitude"] as! Double)
+//            let long = CLLocationDegrees(dictionary["longitude"] as! Double)
+//            
+//            // The lat and long are used to create a CLLocationCoordinates2D instance.
+//            let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
+//            
+//            // extract the student name and url from the dictionary
+//            let first = dictionary["firstName"] as! String
+//            let last = dictionary["lastName"] as! String
+//            let url = dictionary["mediaURL"] as! String
+//            
+//            // Create the annotation, setting the coordinate, title, and subtitle properties
+//            var annotation = MKPointAnnotation()
+//            annotation.coordinate = coordinate
+//            annotation.title = "\(first) \(last)"
+//            annotation.subtitle = url
+//            
+//            // Add annotation to the annotations collection.
+//            annotations.append(annotation)
+//        }
         
         // Add the annotations to the map.
         self.mapView.addAnnotations(annotations)

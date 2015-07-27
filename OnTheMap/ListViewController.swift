@@ -10,13 +10,17 @@ import UIKit
 
 class ListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
+    @IBOutlet var tableView: UITableView!
+    
     var appDelegate: AppDelegate!
+    
+    /* a reference to the studentLocations singleton */
+    let studentLocations = StudentLocations.sharedInstance()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // set up table view delegates
-        //TODO
+        // TODO: register observer for studentLocation updates
         
         // Additional bar button items
         let refreshButton = UIBarButtonItem(barButtonSystemItem: .Refresh, target: self, action: "onRefreshButtonTap")
@@ -27,6 +31,20 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     }
 
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // Add a notification observer for updates to student location data from Parse.
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onStudentLocationsUpdate", name: studentLocationsUpdateNotificationKey, object: nil)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        // Remove observer for the studentLocations update notification.
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -44,7 +62,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func onRefreshButtonTap() {
         // refresh the collection of student locations from Parse
-        appDelegate.getStudentLocations() { success, errorString in
+        /*TODO - remove: appDelegate.*/studentLocations.getStudentLocations() { success, errorString in
             if success == false {
                 if let errorString = errorString {
                     OTMError(viewController:self).displayErrorAlertView("Error retrieving Locations", message: errorString)
@@ -68,23 +86,37 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
+    /* Received a notification that studentLocations have been updated with new data from Parse. Recreate the pins for all locations. */
+    func onStudentLocationsUpdate() {
+        self.tableView.reloadData()
+        println("onStudentLocationsUpdate()")
+    }
+    
     // MARK: Table View Data Source
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return appDelegate.studentLocations.count
+        //TODO - remove: return appDelegate.studentLocations.count
+        return studentLocations.studentLocations.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("ListViewCellID") as! UITableViewCell
-        let studentLocation = appDelegate.studentLocations[indexPath.row] as? [String: AnyObject]
+// TODO: remove
+//        let studentLocation = appDelegate.studentLocations[indexPath.row] as? [String: AnyObject]
+//
+//        // set the cell text
+//        var firstName = String(), lastName = String()
+//        if let location = studentLocation {
+//            firstName = location["firstName"] as! String
+//            lastName = location["lastName"] as! String
+//        }
+        
+        let studentLocation = studentLocations.studentLocations[indexPath.row]
         
         // set the cell text
-        var firstName = String(), lastName = String()
-        if let location = studentLocation {
-            firstName = location["firstName"] as! String
-            lastName = location["lastName"] as! String
-        }
+        var firstName = studentLocation.firstName
+        var lastName = studentLocation.lastName
         cell.textLabel!.text = firstName + " " + lastName
         
         return cell
@@ -95,8 +127,12 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         // open student's url in Safari browser
-        let studentLocation: [String: AnyObject] = appDelegate.studentLocations[indexPath.row] as! [String : AnyObject]
-        let url = studentLocation["mediaURL"] as! String
+//        let studentLocation: [String: AnyObject] = appDelegate.studentLocations[indexPath.row] as! [String : AnyObject]
+//        let url = studentLocation["mediaURL"] as! String
+        
+        let studentLocation = studentLocations.studentLocations[indexPath.row]
+        let url = studentLocation.mediaURL
+        
         if let requestUrl = NSURL(string: url) {
             UIApplication.sharedApplication().openURL(requestUrl)
         }

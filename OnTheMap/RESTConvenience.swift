@@ -155,9 +155,9 @@ extension RESTClient {
         @return void
             completion handler:
                 result Contains true if login was successful, else it contains false if an error occurred.
-                error  An error if something went wrong, else nil.
+                accountKey A string identifying the user's Id if login was successful (example: "3903878747"), else the empty string.                error  An error if something went wrong, else nil.
     */
-    func loginUdacity(#username: String, password: String, completionHandler: (result: Bool, error: NSError?) -> Void) {
+    func loginUdacity(#username: String, password: String, completionHandler: (result: Bool, accountKey: String, error: NSError?) -> Void) {
         
         /* 1. Specify parameters */
         let parameters: String? = nil
@@ -187,7 +187,7 @@ extension RESTClient {
             /* 3. Send the desired value(s) to completion handler */
             if let error = error {
                 /* Note: If the internet connection is offline, the system generates an NSError and the function returns here. */
-                completionHandler(result: false, error: error)
+                completionHandler(result: false, accountKey:"", error: error)
             } else {
                 // parse the json response which looks like the following:
                 /*
@@ -204,10 +204,14 @@ extension RESTClient {
                 */
                 if let account = JSONResult.valueForKey("account") as? [String : AnyObject] {
                     var registered = false
+                    var key = ""
                     if let _registered = account["registered"] as? Bool {
                         registered = _registered
+                        if let _key = account["key"] as? String {
+                            key = _key
+                        }
                     }
-                    completionHandler(result: registered, error: nil)
+                    completionHandler(result: registered, accountKey:key, error: nil)
                 } else {
                     /* The Login request received a valid response, but the Login failed. The following are error responses from the Udacity service for typical failures:
                     
@@ -229,7 +233,7 @@ extension RESTClient {
                     if let resultCode = JSONResult.valueForKey("status") as? Int {
                         code = resultCode
                     }
-                    completionHandler(result: false, error: NSError(domain: "Udacity Login", code: code, userInfo: [NSLocalizedDescriptionKey: description]))
+                    completionHandler(result: false, accountKey:"", error: NSError(domain: "Udacity Login", code: code, userInfo: [NSLocalizedDescriptionKey: description]))
                 }
             }
         }

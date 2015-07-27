@@ -8,9 +8,10 @@
 
 import Foundation
 
-class StudentLocation {
+struct StudentLocation {
     
-    var uniqueKey = ""
+    var objectId = ""
+    var uniqueKey = ""  // Udacity account (user) id
     var firstName = ""
     var lastName = ""
     var mapString = ""
@@ -20,6 +21,10 @@ class StudentLocation {
     
     /* designated initializer */
     init(dictionary: [String:AnyObject]) {
+        
+        if let id = dictionary["objectId"] as? String {
+            objectId = id
+        }
         
         if let key = dictionary["uniqueKey"] as? String {
             uniqueKey = key

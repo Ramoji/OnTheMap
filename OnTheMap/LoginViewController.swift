@@ -12,6 +12,9 @@ class LoginViewController: UIViewController {
 
     var appDelegate: AppDelegate!
     
+    /* a reference to the studentLocations singleton */
+    let studentLocations = StudentLocations.sharedInstance()
+    
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     
@@ -40,12 +43,12 @@ class LoginViewController: UIViewController {
         // self.dismissViewControllerAnimated(true, completion: nil)
         
         if let username = emailTextField.text, password = passwordTextField.text {
-            RESTClient.sharedInstance().loginUdacity(username: username, password: password) {result, error in
+            RESTClient.sharedInstance().loginUdacity(username: username, password: password) {result, accountKey, error in
                 if error == nil {
                     delegate.loggedIn = true
                     
                     // get student locations from Parse
-                    self.appDelegate.getStudentLocations() { success, errorString in
+                    /*TODO: Remove: self.appDelegate.*/ self.studentLocations.getStudentLocations() { success, errorString in
                         if success == false {
                             if let errorString = errorString {
                                 OTMError(viewController:self).displayErrorAlertView("Error retrieving Locations", message: errorString)
@@ -55,6 +58,8 @@ class LoginViewController: UIViewController {
                                 self.dismissViewControllerAnimated(true, completion: nil)
                             }
                         } else {
+                            // successfully logged in - save the user's account key
+                            delegate.userAccountKey = accountKey
                             self.dismissViewControllerAnimated(true, completion: nil)
                         }
                     }

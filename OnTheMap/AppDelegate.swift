@@ -15,11 +15,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     /* true if the user has loggedIn to Udacity, else false */
     var loggedIn = false
     
+    /* logged in user's accountKey */
+    var userAccountKey: String = ""
+    
     /* An array of dictionaries where each dictionary describes the location of a student.*/
-    var studentLocations = [AnyObject]()
+    //var studentLocations = [AnyObject]()
     
     /* A custom NSNotification that indicates updated student location data has been obtained from Parse. */
-    let studentLocationsUpdateNotificationKey =  "com.johnbateman.studentLocationsUpdateNotificationKey"
+    //let studentLocationsUpdateNotificationKey =  "com.johnbateman.studentLocationsUpdateNotificationKey"
 
     var window: UIWindow?
     
@@ -52,34 +55,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    // TODO: moved to StudentLocations
     /* 
         @brief Get an array of student location dictionaries from Parse.
     */
-    func getStudentLocations(completion: (result: Bool, errorString: String?) -> Void) {
-        RESTClient.sharedInstance().getStudentLocations() { success, arrayOfLocationDictionaries, errorString in
-            if errorString == nil {
-                if let array = arrayOfLocationDictionaries {
-                    // Update collection of student locations with the new data from Parse.
-                    self.studentLocations = array
-                    
-                    // Send a notification indicating new student location data has been obtained from Parse.
-                    NSNotificationCenter.defaultCenter().postNotificationName(self.studentLocationsUpdateNotificationKey, object: self)
-                    
-                    //TODO remove:
-                    // println("new student location data: \(array)")
-                } else {
-                    // Server responded with success, but a nil array. Do not update local studentLocations.
-                    println("new student location data returned a nil array")
-                }
-                completion(result:true, errorString: nil)
-            }
-            else {
-                println("error getStudentLocations()")
-                //self.displayErrorAlertView("Student Location Request Failed", message: errorString!)
-                completion(result:false, errorString: errorString)
-            }
-        }
-    }
+//    func getStudentLocations(completion: (result: Bool, errorString: String?) -> Void) {
+//        RESTClient.sharedInstance().getStudentLocations() { success, arrayOfLocationDictionaries, errorString in
+//            if errorString == nil {
+//                if let array = arrayOfLocationDictionaries {
+//                    // Update collection of student locations with the new data from Parse.
+//                    self.studentLocations = array
+//                    
+//                    // Send a notification indicating new student location data has been obtained from Parse.
+//                    NSNotificationCenter.defaultCenter().postNotificationName(/*TODO: remove self --> self.*/studentLocationsUpdateNotificationKey, object: self)
+//                    
+//                    //TODO remove:
+//                    // println("new student location data: \(array)")
+//                } else {
+//                    // Server responded with success, but a nil array. Do not update local studentLocations.
+//                    println("new student location data returned a nil array")
+//                }
+//                completion(result:true, errorString: nil)
+//            }
+//            else {
+//                println("error getStudentLocations()")
+//                //self.displayErrorAlertView("Student Location Request Failed", message: errorString!)
+//                completion(result:false, errorString: errorString)
+//            }
+//        }
+//    }
     
     // MARK: test functions - TODO: remove
 

@@ -22,6 +22,7 @@
 		9E4161921B62CBD2009A9D30 /* RESTConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4161911B62CBD2009A9D30 /* RESTConvenience.swift */; };
 		9E923C9E1B6441DB00F2B0A7 /* StudentLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E923C9D1B6441DB00F2B0A7 /* StudentLocation.swift */; };
 		9E923CA01B65AE3A00F2B0A7 /* OTMError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E923C9F1B65AE3A00F2B0A7 /* OTMError.swift */; };
+		9E923CA31B65D3AE00F2B0A7 /* StudentLocations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E923CA21B65D3AE00F2B0A7 /* StudentLocations.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,7 @@
 		9E4161911B62CBD2009A9D30 /* RESTConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RESTConvenience.swift; sourceTree = "<group>"; };
 		9E923C9D1B6441DB00F2B0A7 /* StudentLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentLocation.swift; sourceTree = "<group>"; };
 		9E923C9F1B65AE3A00F2B0A7 /* OTMError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMError.swift; sourceTree = "<group>"; };
+		9E923CA21B65D3AE00F2B0A7 /* StudentLocations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentLocations.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,19 +97,15 @@
 		9E4161601B61855D009A9D30 /* OnTheMap */ = {
 			isa = PBXGroup;
 			children = (
+				9E923CA41B65DDEE00F2B0A7 /* ViewControllers */,
+				9E923CA11B65D38C00F2B0A7 /* Model */,
 				9E4161901B62CBB3009A9D30 /* REST */,
 				9E4161631B61855D009A9D30 /* AppDelegate.swift */,
-				9E4161651B61855D009A9D30 /* MapViewController.swift */,
-				9E4161671B61855D009A9D30 /* ListViewController.swift */,
 				9E4161691B61855D009A9D30 /* Main.storyboard */,
+				9E923C9F1B65AE3A00F2B0A7 /* OTMError.swift */,
 				9E41616C1B61855D009A9D30 /* Images.xcassets */,
 				9E41616E1B61855D009A9D30 /* LaunchScreen.xib */,
 				9E4161611B61855D009A9D30 /* Supporting Files */,
-				9E4161851B618A63009A9D30 /* LoginViewController.swift */,
-				9E4161871B6193F5009A9D30 /* InfoPostingProvideLocationViewController.swift */,
-				9E4161891B619406009A9D30 /* InfoPostingMapViewController.swift */,
-				9E923C9D1B6441DB00F2B0A7 /* StudentLocation.swift */,
-				9E923C9F1B65AE3A00F2B0A7 /* OTMError.swift */,
 			);
 			path = OnTheMap;
 			sourceTree = "<group>";
@@ -145,6 +143,27 @@
 				9E4161911B62CBD2009A9D30 /* RESTConvenience.swift */,
 			);
 			name = REST;
+			sourceTree = "<group>";
+		};
+		9E923CA11B65D38C00F2B0A7 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9E923C9D1B6441DB00F2B0A7 /* StudentLocation.swift */,
+				9E923CA21B65D3AE00F2B0A7 /* StudentLocations.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		9E923CA41B65DDEE00F2B0A7 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				9E4161851B618A63009A9D30 /* LoginViewController.swift */,
+				9E4161671B61855D009A9D30 /* ListViewController.swift */,
+				9E4161651B61855D009A9D30 /* MapViewController.swift */,
+				9E4161871B6193F5009A9D30 /* InfoPostingProvideLocationViewController.swift */,
+				9E4161891B619406009A9D30 /* InfoPostingMapViewController.swift */,
+			);
+			name = ViewControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -256,6 +275,7 @@
 				9E4161861B618A63009A9D30 /* LoginViewController.swift in Sources */,
 				9E4161681B61855D009A9D30 /* ListViewController.swift in Sources */,
 				9E4161641B61855D009A9D30 /* AppDelegate.swift in Sources */,
+				9E923CA31B65D3AE00F2B0A7 /* StudentLocations.swift in Sources */,
 				9E923C9E1B6441DB00F2B0A7 /* StudentLocation.swift in Sources */,
 				9E923CA01B65AE3A00F2B0A7 /* OTMError.swift in Sources */,
 				9E4161661B61855D009A9D30 /* MapViewController.swift in Sources */,

@@ -12,6 +12,8 @@ import MapKit
 
 class InfoPostingProvideLocationViewController: UIViewController {
 
+    var appDelegate: AppDelegate!
+    
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var middleView: UIView!
     @IBOutlet weak var bottomView: UIView!
@@ -27,6 +29,9 @@ class InfoPostingProvideLocationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // get a reference to the app delegate
+        appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        
         // show initial set of controls
         presentFindOnMapViewState()
     }
@@ -48,8 +53,11 @@ class InfoPostingProvideLocationViewController: UIViewController {
     
     /* Attempt to forward geocode the address entered by the user. If that works drop a pin on the map. */
     @IBAction func findOnMapButtonTap(sender: AnyObject) {
-        if let text = locationTextField.text {
-            let testText = "San Mateo, CA"
+        if let text = locationTextField.text { // TODO: switch references to testText back to text
+            let testText = "obloabli23kdf"//"San Mateo, CA" // TODO: -remove once able to interact with locationTextField
+            
+            // TODO: show UIActivityViewIndicator (storyboard, show,hide approach)
+            
             forwardGeoCodeLocation(testText) { placemark, error in
                 if error == nil {
                     if let placemark = placemark {
@@ -64,9 +72,11 @@ class InfoPostingProvideLocationViewController: UIViewController {
                         
                     } else {
                         //TODO: alertview for error - geocode to clplacemark failed and returned a nil placemark
+                        OTMError(viewController:self).displayErrorAlertView("Geocoding error", message: "Failed to forward geocode \(testText)")
                     }
                 } else {
                     //TODO: alertview for error - geocode to clplacemark failed
+                    OTMError(viewController:self).displayErrorAlertView("Geocoding error", message: "Failed to forward geocode \(testText)")
                 }
             }
         }
@@ -75,20 +85,14 @@ class InfoPostingProvideLocationViewController: UIViewController {
     /* Create a StudentLocation object. */
     func createStudentLocation(placemark: CLPlacemark) -> StudentLocation {
         var placeDictionary: [String: AnyObject] = [
-            "uniqueKey" : "1010101010",
+            "uniqueKey" : appDelegate.userAccountKey,
             "firstName" : "Racer",
             "lastName" : "X",
-//            "mapString" : "\(placemark.addressDictionary[placemark.locality]), \(placemark.addressDictionary[placemark.administrativeArea])",
             "mediaURL" : "https://udacity.com",
             "latitude" : placemark.location.coordinate.latitude,
             "longitude" : placemark.location.coordinate.longitude
         ]
         var mapString = ""
-//        if let addressLine = placemark.addressDictionary["FormattedAddressLines"] as? String {
-//            placeDictionary["mapString"] = addressLine
-//        }
-        
-        
         if let city = placemark.addressDictionary["City"] as? String {
             mapString += city
         }
