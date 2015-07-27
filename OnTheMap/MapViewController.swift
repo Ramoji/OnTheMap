@@ -27,9 +27,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         // get a reference to the app delegate
         appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         
-        // request student locations from Parse
-        appDelegate.getStudentLocations()
-        
         // set the mapView delegate to this view controller
         mapView.delegate = self
     }
@@ -40,9 +37,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         // Add a notification observer for updates to student location data from Parse.
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onStudentLocationsUpdate", name: appDelegate.studentLocationsUpdateNotificationKey, object: nil)
         
-        // Redraw the pins
-        //self.mapView.setNeedsDisplay()
-
+        // Draw the pins now (as it is conceivable that the notification arrived prior to the observer being registered.)
         createPins()
     }
     
@@ -73,14 +68,28 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         var controller = storyboard.instantiateViewControllerWithIdentifier("LoginStoryboardID") as! LoginViewController
         self.presentViewController(controller, animated: true, completion: nil);
     }
+
+    func displayInfoPostingViewController() {
+        var storyboard = UIStoryboard (name: "Main", bundle: nil)
+        var controller = storyboard.instantiateViewControllerWithIdentifier("InfoPostingProvideLocationStoryboardID") as! InfoPostingProvideLocationViewController
+        self.presentViewController(controller, animated: true, completion: nil);
+    }
     
     func onPinButtonTap() {
-        createPins()
+        displayInfoPostingViewController()
     }
     
     func onRefreshButtonTap() {
         // refresh the collection of student locations from Parse
-        appDelegate.getStudentLocations()
+        appDelegate.getStudentLocations() { success, errorString in
+            if success == false {
+                if let errorString = errorString {
+                    OTMError(viewController:self).displayErrorAlertView("Error retrieving Locations", message: errorString)
+                } else {
+                    OTMError(viewController:self).displayErrorAlertView("Error retrieving Locations", message: "Unknown error")
+                }
+            }
+        }
     }
     
     /* logout of Udacity session */
@@ -91,10 +100,12 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 self.displayLoginViewController()
             } else {
                 println("Udacity logout failed")
-                // TODO: display alertView error
+                // no display to user
             }
         }
     }
+    
+    /* Received a notification that studentLocations have been updated with new data from Parse. Recreate the pins for all locations. */
     func onStudentLocationsUpdate() {
         createPins()
         println("onStudentLocationsUpdate()")

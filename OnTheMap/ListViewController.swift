@@ -44,7 +44,15 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func onRefreshButtonTap() {
         // refresh the collection of student locations from Parse
-        appDelegate.getStudentLocations()
+        appDelegate.getStudentLocations() { success, errorString in
+            if success == false {
+                if let errorString = errorString {
+                    OTMError(viewController:self).displayErrorAlertView("Error retrieving Locations", message: errorString)
+                } else {
+                    OTMError(viewController:self).displayErrorAlertView("Error retrieving Locations", message: "Unknown error")
+                }
+            }
+        }
     }
     
     /* logout of Udacity session */
