@@ -32,7 +32,8 @@ extension RESTClient {
             
             /* 3. Send the desired value(s) to completion handler */
             if let error = error {
-                completionHandler(success: false, arrayOfLocationDictionaries: nil, errorString: "Get Student Locations request to Parse Failed.")
+                // TODO: set error string to localizedDescription in error
+                completionHandler(success: false, arrayOfLocationDictionaries: nil, errorString: error.localizedDescription)
             } else {
                 // parse the json response which looks like the following:
                 /*
@@ -57,7 +58,7 @@ extension RESTClient {
                 if let arrayOfLocationDicts = JSONResult.valueForKey("results") as? [AnyObject] {
                     completionHandler(success: true, arrayOfLocationDictionaries: arrayOfLocationDicts, errorString: nil)
                 } else {
-                    completionHandler(success: false, arrayOfLocationDictionaries: nil, errorString: "No results key in JSON response to the Parse Get Student Locations request.")
+                    completionHandler(success: false, arrayOfLocationDictionaries: nil, errorString: "No results from server.")
                 }
             }
         }
@@ -77,7 +78,7 @@ extension RESTClient {
         /* 1. Specify parameters, method (if has {key}) */
 //        var parameters = [
 //            "limit" : "100"
-//        ]
+//        ]  // TODO: cleanup if not used
         
         // specify base URL
         let baseURL = "https://api.parse.com/" //Constants.parseBaseURL
@@ -185,6 +186,7 @@ extension RESTClient {
             
             /* 3. Send the desired value(s) to completion handler */
             if let error = error {
+                /* Note: If the internet connection is offline, the system generates an NSError and the function returns here. */
                 completionHandler(result: false, error: error)
             } else {
                 // parse the json response which looks like the following:
@@ -207,7 +209,27 @@ extension RESTClient {
                     }
                     completionHandler(result: registered, error: nil)
                 } else {
-                    completionHandler(result: false, error: NSError(domain: "postToFavoritesList parsing", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not parse postToFavoritesList"]))
+                    /* The Login request received a valid response, but the Login failed. The following are error responses from the Udacity service for typical failures:
+                    
+                        // On nonexistant account, or invalid credentials
+                        {"status": 403, "error": "Account not found or invalid credentials."}
+                        
+                        // On missing username
+                        {"status": 400, "parameter": "udacity.username", "error": "trails.Error 400: Missing parameter 'username'"}
+                        
+                        // On missing password
+                        {"status": 400, "parameter": "udacity.password", "error": "trails.Error 400: Missing parameter 'password'"}
+                    */
+                    
+                    var description = "Login error."
+                    var code = 0
+                    if let error = JSONResult.valueForKey("error") as? String {
+                        description = error
+                    }
+                    if let resultCode = JSONResult.valueForKey("status") as? Int {
+                        code = resultCode
+                    }
+                    completionHandler(result: false, error: NSError(domain: "Udacity Login", code: code, userInfo: [NSLocalizedDescriptionKey: description]))
                 }
             }
         }

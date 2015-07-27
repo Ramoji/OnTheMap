@@ -43,8 +43,6 @@ class RESTClient {
     /* Create a task to send an HTTP Get request */    
     func taskForGETMethod(#baseUrl: String, method: String, headerParameters: [String : AnyObject], queryParameters: [String : AnyObject]?, completionHandler: (result: AnyObject!, error: NSError?) -> Void) -> NSURLSessionDataTask {
         
-        // TODO: restrict to 100 max results
-        
         /* 1. Set the parameters */
         var mutableParameters = [String : AnyObject]()
         if let params = queryParameters {
@@ -69,11 +67,10 @@ class RESTClient {
         
         /* 4. Make the request */
         let task = session.dataTaskWithRequest(request) {data, response, downloadError in
-            
             /* 5/6. Parse the data and use the data (happens in completion handler) */
             if let error = downloadError {
                 let newError = RESTClient.errorForData(data, response: response, error: error)
-                completionHandler(result: nil, error: downloadError)
+                completionHandler(result: nil, error: newError) //TODO: downloadError instead of newError?
             } else {
                 RESTClient.parseJSONWithCompletionHandler(data, completionHandler: completionHandler)
             }
@@ -131,7 +128,7 @@ class RESTClient {
                 // ignore first 5 characters for Udacity responses
                 if baseUrl == Constants.udacityBaseURL {
                     returnData = data.subdataWithRange(NSMakeRange(5, data.length - 5)) /* subset response data! */
-                    println(NSString(data: returnData, encoding: NSUTF8StringEncoding)) // TODO: remove this debug line
+                    //println(NSString(data: returnData, encoding: NSUTF8StringEncoding)) // TODO: remove this debug line
                 }
                 
                 RESTClient.parseJSONWithCompletionHandler(returnData, completionHandler: completionHandler)

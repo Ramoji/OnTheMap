@@ -10,15 +10,17 @@ import UIKit
 
 class LoginViewController: UIViewController {
 
+    var appDelegate: AppDelegate!
+    
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        // get a reference to the app delegate
+        appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     }
-    
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -30,22 +32,10 @@ class LoginViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-    
     @IBAction func onLoginButtonTap(sender: AnyObject) {
-        // TODO: make real login call to Udacity API
         let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
         
-        // debug
+        // TODO: remove. These 2 lines are for debug convenience to avoid having to login.
         // delegate.loggedIn = true
         // self.dismissViewControllerAnimated(true, completion: nil)
         
@@ -53,27 +43,34 @@ class LoginViewController: UIViewController {
             RESTClient.sharedInstance().loginUdacity(username: username, password: password) {result, error in
                 if error == nil {
                     delegate.loggedIn = true
-                    self.dismissViewControllerAnimated(true, completion: nil)
                     
-                    // TODO - move this to the map and list VCs. Here it is for debug only.
-//                    RESTClient.sharedInstance().logoutUdacity() {result, error in
-//                        if error == nil {
-//                            println("logged out")
-//                        } else {
-//                            println("logout failed")
-//                        }
-//                    }
+                    // get student locations from Parse
+                    self.appDelegate.getStudentLocations() { success, errorString in
+                        if success == false {
+                            if let errorString = errorString {
+                                OTMError(viewController:self).displayErrorAlertView("Error retrieving Locations", message: errorString)
+                                self.dismissViewControllerAnimated(true, completion: nil)
+                            } else {
+                                OTMError(viewController:self).displayErrorAlertView("Error retrieving Locations", message: "Unknown error")
+                                self.dismissViewControllerAnimated(true, completion: nil)
+                            }
+                        } else {
+                            self.dismissViewControllerAnimated(true, completion: nil)
+                        }
+                    }
                     
+                    //self.dismissViewControllerAnimated(true, completion: nil)
                 } else {
                     delegate.loggedIn = false
-                    // TODO - display alertview
+                    OTMError(viewController:self).displayErrorAlertView("Login Error", message: error!.localizedDescription)
                 }
             }
         }
     }
 
     @IBAction func onLoginWithFacebookButtonTap(sender: AnyObject) {
-        // TODO: make real login call to Facebook API
+        // TODO: make login call to Facebook API
     }
     
+
 }
