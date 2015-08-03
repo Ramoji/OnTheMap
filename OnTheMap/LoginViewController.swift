@@ -39,8 +39,9 @@ class LoginViewController: UIViewController {
         let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
         
         // TODO: remove. These 2 lines are for debug convenience to avoid having to login.
-        // delegate.loggedIn = true
-        // self.dismissViewControllerAnimated(true, completion: nil)
+//        delegate.loggedIn = true
+//        self.dismissViewControllerAnimated(true, completion: nil)
+//        return
         
         if let username = emailTextField.text, password = passwordTextField.text {
             RESTClient.sharedInstance().loginUdacity(username: username, password: password) {result, accountKey, error in

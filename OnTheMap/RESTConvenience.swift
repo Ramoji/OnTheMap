@@ -140,10 +140,22 @@ extension RESTClient {
                         "objectId":"CDHfAy8sdp"
                     }
                 */
-                if let dictionary = JSONResult.valueForKey("objectId") as? String {
-                    completionHandler(result: true, error: nil)
+                if let errorString = JSONResult.valueForKey("error") as? String {
+                    // a valid response was received from the service, but the response contains an error code like the following:
+                    /*
+                        {
+                            code = 142
+                            error = "uniqueKey is required for a Student Location"
+                        }
+                    */
+                    let error = NSError(domain: "Parse POST response", code: 0, userInfo: [NSLocalizedDescriptionKey: errorString])
+                    completionHandler(result: false, error: error)
                 } else {
-                    completionHandler(result: false, error: NSError(domain: "postToFavoritesList parsing", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not parse postToFavoritesList"]))
+                    if let dictionary = JSONResult.valueForKey("objectId") as? String {
+                        completionHandler(result: true, error: nil)
+                    } else {
+                        completionHandler(result: false, error: NSError(domain: "parsing Parse POST response", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not parse postToFavoritesList"]))
+                    }
                 }
             }
         }

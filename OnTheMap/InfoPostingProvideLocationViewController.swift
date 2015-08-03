@@ -10,7 +10,7 @@ import UIKit
 import CoreLocation
 import MapKit
 
-class InfoPostingProvideLocationViewController: UIViewController {
+class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDelegate {
 
     var appDelegate: AppDelegate!
     
@@ -23,7 +23,12 @@ class InfoPostingProvideLocationViewController: UIViewController {
     @IBOutlet weak var submitButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var enterLinkToShareTextField: UITextField!
    
+    // constraints
+    @IBOutlet weak var constraintMapViewBottomToSuperViewBottom: NSLayoutConstraint!
+    
+    
     var studentLocation: StudentLocation? = nil
     
     override func viewDidLoad() {
@@ -31,15 +36,22 @@ class InfoPostingProvideLocationViewController: UIViewController {
 
         // get a reference to the app delegate
         appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        
-        // show initial set of controls
-        presentFindOnMapViewState()
+
+        // set the mapView delegate to this view controller
+        mapView.delegate = self
+
+        // initialize the subviews
+        showViewState(1)
+
+        // initialize text fields
+        initTextFields()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
         // show initial set of controls
-        presentFindOnMapViewState()
+        //presentFindOnMapViewState()
     }
 
     override func didReceiveMemoryWarning() {
@@ -54,11 +66,11 @@ class InfoPostingProvideLocationViewController: UIViewController {
     /* Attempt to forward geocode the address entered by the user. If that works drop a pin on the map. */
     @IBAction func findOnMapButtonTap(sender: AnyObject) {
         if let text = locationTextField.text { // TODO: switch references to testText back to text
-            let testText = "obloabli23kdf"//"San Mateo, CA" // TODO: -remove once able to interact with locationTextField
+            //let testText = "obloabli23kdf"//"San Mateo, CA" // TODO: -remove once able to interact with locationTextField
             
             // TODO: show UIActivityViewIndicator (storyboard, show,hide approach)
-            
-            forwardGeoCodeLocation(testText) { placemark, error in
+            //TODO - remove ...  self.showViewState(2)
+            forwardGeoCodeLocation(text) { placemark, error in
                 if error == nil {
                     if let placemark = placemark {
                         // place pin on map
@@ -68,15 +80,20 @@ class InfoPostingProvideLocationViewController: UIViewController {
                         self.studentLocation = self.createStudentLocation(placemark)
                         
                         // update UI state to reveal map and submit button
-                        self.presentSubmitViewState()
+                        //TODO remove .. self.presentSubmitViewState()
+                        self.showViewState(2)
+                        
+                        if let studentLocation = self.studentLocation {
+                            self.showPinOnMap(studentLocation)
+                        }
                         
                     } else {
                         //TODO: alertview for error - geocode to clplacemark failed and returned a nil placemark
-                        OTMError(viewController:self).displayErrorAlertView("Geocoding error", message: "Failed to forward geocode \(testText)")
+                        OTMError(viewController:self).displayErrorAlertView("Geocoding error", message: "Failed to forward geocode \(text)")
                     }
                 } else {
                     //TODO: alertview for error - geocode to clplacemark failed
-                    OTMError(viewController:self).displayErrorAlertView("Geocoding error", message: "Failed to forward geocode \(testText)")
+                    OTMError(viewController:self).displayErrorAlertView("Geocoding error", message: "Failed to forward geocode \(text)")
                 }
             }
         }
@@ -123,46 +140,162 @@ class InfoPostingProvideLocationViewController: UIViewController {
     }
     
     @IBAction func onSubmitButtonTap(sender: AnyObject) {
-        if let loc = studentLocation {
-            RESTClient.sharedInstance().postStudentLocationToParse(loc) {result, error in
-                if error == nil {
-                    println("successfully posted StudentLocation to Parse")
-                } else {
-                    println("error posting StudentLocation to Parse")
+        
+        if let text = enterLinkToShareTextField.text {
+            if text == "" {
+                // url string is empty
+                OTMError(viewController:self).displayErrorAlertView("Forgot Link", message: "Please provide a link to a website and reselect submit.")
+            } else {
+                // URL string is not empty
+                if let loc = studentLocation {
+                    RESTClient.sharedInstance().postStudentLocationToParse(loc) {result, error in
+                        if error == nil {
+                            println("successfully posted StudentLocation to Parse")
+                            self.dismissViewControllerAnimated(true, completion: nil)
+                        } else {
+                            // TODO display error message to user
+                            println("error posting StudentLocation to Parse")
+                            var errorMessage = "error"
+                            if let errorString = error?.localizedDescription {
+                                errorMessage = errorString
+                            }
+                            OTMError(viewController:self).displayErrorAlertView("Submit Failed", message: errorMessage)
+                        }
+                    }
                 }
             }
+            
+        } else {
+            // url string is nil
+            OTMError(viewController:self).displayErrorAlertView("Forgot Link", message: "Pleaes provide a link to a website and reselect submit.")
         }
     }
     
-    /* Shows/hides views to allow user to enter an address and select the [Find on Map] button. */
-    func presentFindOnMapViewState() {
-//        topView.hidden = false
-//        middleView.hidden = true
-//        bottomView.hidden = false
-        
-//        topView.hidden = false
-//        middleView.hidden = true
-//        bottomView.hidden = false
-//        whereAreYouStudyingTodayLabel.hidden = false
-//        locationTextField.hidden = false
-//        findOnMapButton.hidden = false
-//        submitButton.hidden = true
-//        cancelButton.hidden = false
-//        mapView.hidden = true
-//        self.view.setNeedsDisplay()
+    /* show and hide views based on state */
+    func showViewState(state: Int) {
+        switch state {
+            
+        case 1:
+            // enter location. Find on the Map button.
+            //topView.hidden = false
+            locationTextField.hidden = false
+            mapView.hidden = true
+            submitButton.hidden = true
+            findOnMapButton.hidden = false
+            whereAreYouStudyingTodayLabel.hidden = false
+            enterLinkToShareTextField.hidden = true
+            
+//            topView.backgroundColor = UIColor.clearColor()
+//            bottomView.backgroundColor = UIColor.clearColor()
+            
+        case 2:
+            // map. Submit button.
+            locationTextField.hidden = true
+            mapView.hidden = false
+            submitButton.hidden = false
+            findOnMapButton.hidden = true
+            whereAreYouStudyingTodayLabel.hidden = true
+            enterLinkToShareTextField.hidden = false
+            
+            topView.backgroundColor = UIColor(red: 91/255, green: 134/255, blue: 237/255, alpha: 1)
+            bottomView.backgroundColor = UIColor(white: 1, alpha: 0.3) // UIColor.clearColor() //
+            //bottomView.hidden = false
+            
+//            let y = self.view.frame.height - middleView.frame.height + 150
+//            let newHeight = self.view.frame.height - middleView.frame.origin.y
+//            middleView.frame = CGRectMake(0, middleView.frame.origin.y, self.view.frame.width, newHeight)
+//            middleView.hidden = false
+//            mapView.frame = CGRectMake(0, middleView.frame.origin.y, self.view.frame.width, newHeight)
+            
+//            constraintMapViewBottomToSuperViewBottom.constant = 0.0
+            self.view.layoutIfNeeded()
+            
+        default:
+            locationTextField.hidden = false
+            mapView.hidden = true
+            submitButton.hidden = true
+            findOnMapButton.hidden = false
+            whereAreYouStudyingTodayLabel.hidden = false
+            enterLinkToShareTextField.hidden = true
+            
+            topView.backgroundColor = UIColor.clearColor()
+        }
+        mapView.setNeedsDisplay()
     }
     
-    /* Shows/hides views to display map view and Submit button. */
-    func presentSubmitViewState() {
-//        topView.hidden = false
-//        middleView.hidden = true
-//        bottomView.hidden = true
-//        whereAreYouStudyingTodayLabel.hidden = true
-//        locationTextField.hidden = true
-//        findOnMapButton.hidden = true
-//        submitButton.hidden = false
-//        cancelButton.hidden = false
-//        mapView.hidden = false
-//        self.view.setNeedsDisplay()
+    
+    // MARK: - MKMapViewDelegate
+    
+    // Create an accessory view for the pin annotation callout when it is added to the map view.
+    // Make the pin color purple to identify it as a pin the user placed on the map.
+    func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
+        
+        let reuseId = "pin"
+        
+        var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
+        
+        if pinView == nil {
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView!.canShowCallout = true
+            pinView!.pinColor = .Purple
+            pinView!.rightCalloutAccessoryView = UIButton.buttonWithType(.DetailDisclosure) as! UIButton  // DetailDisclosure, InfoLight, InfoDark, ContactAdd
+            pinView!.animatesDrop = true
+        }
+        else {
+            pinView!.annotation = annotation
+        }
+        
+        return pinView
+    }
+    
+    
+    // This delegate method is implemented to respond to taps. It opens the system browser
+    // to the URL specified in the annotationViews subtitle property.
+    func mapView(mapView: MKMapView!, annotationView: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        
+        if control == annotationView.rightCalloutAccessoryView {
+            let app = UIApplication.sharedApplication()
+            app.openURL(NSURL(string: annotationView.annotation.subtitle!)!)
+        }
+    }
+    
+    // MARK: helper functions
+    
+    /* Configure initial text attributes on text fields */
+    func initTextFields() {
+        // set attributes of placeholder text on text fields
+        locationTextField.attributedPlaceholder = NSAttributedString(string: "Enter Your Location Here", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor()])
+        enterLinkToShareTextField.attributedPlaceholder = NSAttributedString(string: "Enter a Link to Share Here", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor()])
+        
+        // hide border on text fields
+        locationTextField.borderStyle = UITextBorderStyle.None
+        enterLinkToShareTextField.borderStyle = UITextBorderStyle.None
+    }
+
+    /* Displays the current studentLocation on the mapView. */
+    func showPinOnMap(location: StudentLocation) {
+        
+        // The lat and long are used to create a CLLocationCoordinates2D instance.
+        let coordinate = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude )
+        
+        // Here we create the annotation and set its coordiate, title, and subtitle properties
+        var annotation = MKPointAnnotation()
+        annotation.coordinate = coordinate
+        annotation.title = "\(location.firstName) \(location.lastName)"
+        annotation.subtitle = location.mediaURL
+        
+        
+        // Add the annotation to an array of annotations.
+        var annotations = [MKPointAnnotation]()
+        annotations.append(annotation)
+        
+        // Add the annotations to the map.
+        self.mapView.addAnnotations(annotations)
+        
+        // Set the center of the map.
+        self.mapView.setCenterCoordinate(coordinate, animated: true)
+        
+        // Tell the OS that the mapView needs to be refreshed.
+        self.mapView.setNeedsDisplay()
     }
 }
