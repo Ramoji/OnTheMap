@@ -28,6 +28,21 @@ class LoginViewController: UIViewController {
         if appDelegate.loggedIn == true {
             displayMapViewController()
         }
+        
+        // inset text in edit text fields
+        var insetView = UIView(frame:CGRect(x:0, y:0, width:10, height:10))
+        emailTextField.leftViewMode = UITextFieldViewMode.Always
+        emailTextField.leftView = insetView
+        
+        var insetViewPwd = UIView(frame:CGRect(x:0, y:0, width:10, height:10))
+        passwordTextField.leftViewMode = UITextFieldViewMode.Always
+        passwordTextField.leftView = insetViewPwd
+        
+        // set placeholder text color to white in edit text fields
+        emailTextField.attributedPlaceholder = NSAttributedString(string:"Email",
+            attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
+        passwordTextField.attributedPlaceholder = NSAttributedString(string:"Password",
+            attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -39,6 +54,16 @@ class LoginViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+//    // inset text for placeholder position
+//    func textRectForBounds(bounds:CGRect) -> CGRect {
+//        return CGRectInset( bounds , 10 , 10 )
+//    }
+//    
+//    // inset text for user enterred text position
+//    func editingRectForBounds(bounds:CGRect) -> CGRect {
+//        return CGRectInset( bounds , 10 , 10 )
+//    }
     
     @IBAction func onLoginButtonTap(sender: AnyObject) {
         let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
@@ -83,6 +108,12 @@ class LoginViewController: UIViewController {
         }
     }
 
+    @IBAction func onSignUpButtonTap(sender: AnyObject) {
+        if let requestUrl = NSURL(string: "https://www.udacity.com/account/auth#!/signup") {
+            UIApplication.sharedApplication().openURL(requestUrl)
+        }
+    }
+    
     @IBAction func onLoginWithFacebookButtonTap(sender: AnyObject) {
         // TODO: make login call to Facebook API
     }
