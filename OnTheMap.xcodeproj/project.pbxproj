@@ -16,7 +16,6 @@
 		9E41617C1B61855D009A9D30 /* OnTheMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E41617B1B61855D009A9D30 /* OnTheMapTests.swift */; };
 		9E4161861B618A63009A9D30 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4161851B618A63009A9D30 /* LoginViewController.swift */; };
 		9E4161881B6193F5009A9D30 /* InfoPostingProvideLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4161871B6193F5009A9D30 /* InfoPostingProvideLocationViewController.swift */; };
-		9E41618A1B619406009A9D30 /* InfoPostingMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4161891B619406009A9D30 /* InfoPostingMapViewController.swift */; };
 		9E41618D1B62BCFA009A9D30 /* RESTClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E41618C1B62BCFA009A9D30 /* RESTClient.swift */; };
 		9E41618F1B62BDEB009A9D30 /* RESTConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E41618E1B62BDEB009A9D30 /* RESTConstants.swift */; };
 		9E4161921B62CBD2009A9D30 /* RESTConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4161911B62CBD2009A9D30 /* RESTConvenience.swift */; };
@@ -49,7 +48,6 @@
 		9E41617B1B61855D009A9D30 /* OnTheMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnTheMapTests.swift; sourceTree = "<group>"; };
 		9E4161851B618A63009A9D30 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		9E4161871B6193F5009A9D30 /* InfoPostingProvideLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoPostingProvideLocationViewController.swift; sourceTree = "<group>"; };
-		9E4161891B619406009A9D30 /* InfoPostingMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoPostingMapViewController.swift; sourceTree = "<group>"; };
 		9E41618C1B62BCFA009A9D30 /* RESTClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RESTClient.swift; sourceTree = "<group>"; };
 		9E41618E1B62BDEB009A9D30 /* RESTConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RESTConstants.swift; sourceTree = "<group>"; };
 		9E4161911B62CBD2009A9D30 /* RESTConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RESTConvenience.swift; sourceTree = "<group>"; };
@@ -161,7 +159,6 @@
 				9E4161671B61855D009A9D30 /* ListViewController.swift */,
 				9E4161651B61855D009A9D30 /* MapViewController.swift */,
 				9E4161871B6193F5009A9D30 /* InfoPostingProvideLocationViewController.swift */,
-				9E4161891B619406009A9D30 /* InfoPostingMapViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -267,7 +264,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E41618A1B619406009A9D30 /* InfoPostingMapViewController.swift in Sources */,
 				9E41618F1B62BDEB009A9D30 /* RESTConstants.swift in Sources */,
 				9E4161921B62CBD2009A9D30 /* RESTConvenience.swift in Sources */,
 				9E4161881B6193F5009A9D30 /* InfoPostingProvideLocationViewController.swift in Sources */,

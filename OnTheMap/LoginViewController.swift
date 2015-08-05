@@ -23,6 +23,11 @@ class LoginViewController: UIViewController {
 
         // get a reference to the app delegate
         appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        // If already logged in present the Tab Bar conttoller.
+        if appDelegate.loggedIn == true {
+            displayMapViewController()
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -53,15 +58,19 @@ class LoginViewController: UIViewController {
                         if success == false {
                             if let errorString = errorString {
                                 OTMError(viewController:self).displayErrorAlertView("Error retrieving Locations", message: errorString)
-                                self.dismissViewControllerAnimated(true, completion: nil)
+                                //self.dismissViewControllerAnimated(true, completion: nil)
                             } else {
                                 OTMError(viewController:self).displayErrorAlertView("Error retrieving Locations", message: "Unknown error")
-                                self.dismissViewControllerAnimated(true, completion: nil)
+                                //self.dismissViewControllerAnimated(true, completion: nil)
                             }
                         } else {
                             // successfully logged in - save the user's account key
                             delegate.userAccountKey = accountKey
-                            self.dismissViewControllerAnimated(true, completion: nil)
+                            //self.dismissViewControllerAnimated(true, completion: nil)
+                            
+                            dispatch_async(dispatch_get_main_queue()) {
+                                self.displayMapViewController()
+                            }
                         }
                     }
                     
@@ -78,5 +87,16 @@ class LoginViewController: UIViewController {
         // TODO: make login call to Facebook API
     }
     
-
+    func displayTabBarController() {
+        var storyboard = UIStoryboard (name: "Main", bundle: nil)
+        var controller = storyboard.instantiateViewControllerWithIdentifier("TabBarControllerStoryboardID") as! UITabBarController
+        self.presentViewController(controller, animated: true, completion: nil);
+    }
+    
+    func displayMapViewController() {
+        performSegueWithIdentifier("LoginToTabBarSegueID", sender: self)
+//        var storyboard = UIStoryboard (name: "Main", bundle: nil)
+//        var controller = storyboard.instantiateViewControllerWithIdentifier("MapViewControllerStoryboardID") as! UINavigationController
+//        self.presentViewController(controller, animated: true, completion: nil);
+    }
 }

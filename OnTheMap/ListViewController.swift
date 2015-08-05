@@ -78,6 +78,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         RESTClient.sharedInstance().logoutUdacity() {result, error in
             if error == nil {
                 println("successfully logged out from Udacity")
+                self.appDelegate.loggedIn = false
                 self.displayLoginViewController()
             } else {
                 println("Udacity logout failed")

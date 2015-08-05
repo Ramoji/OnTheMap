@@ -28,6 +28,7 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
     // constraints
     @IBOutlet weak var constraintMapViewBottomToSuperViewBottom: NSLayoutConstraint!
     
+    var activityIndicator : UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRectMake(0, 0, 50, 50)) as UIActivityIndicatorView
     
     var studentLocation: StudentLocation? = nil
     
@@ -49,9 +50,6 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
-        // show initial set of controls
-        //presentFindOnMapViewState()
     }
 
     override func didReceiveMemoryWarning() {
@@ -65,12 +63,13 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
     
     /* Attempt to forward geocode the address entered by the user. If that works drop a pin on the map. */
     @IBAction func findOnMapButtonTap(sender: AnyObject) {
-        if let text = locationTextField.text { // TODO: switch references to testText back to text
-            //let testText = "obloabli23kdf"//"San Mateo, CA" // TODO: -remove once able to interact with locationTextField
+        if let text = locationTextField.text {
+            // show UIActivityViewIndicator (storyboard, show,hide approach)
+            startActivityIndicator()
             
-            // TODO: show UIActivityViewIndicator (storyboard, show,hide approach)
-            //TODO - remove ...  self.showViewState(2)
             forwardGeoCodeLocation(text) { placemark, error in
+                self.stopActivityIndicator()
+                
                 if error == nil {
                     if let placemark = placemark {
                         // place pin on map
@@ -80,7 +79,6 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
                         self.studentLocation = self.createStudentLocation(placemark)
                         
                         // update UI state to reveal map and submit button
-                        //TODO remove .. self.presentSubmitViewState()
                         self.showViewState(2)
                         
                         if let studentLocation = self.studentLocation {
@@ -88,11 +86,11 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
                         }
                         
                     } else {
-                        //TODO: alertview for error - geocode to clplacemark failed and returned a nil placemark
+                        // alertview for error - geocode to clplacemark failed and returned a nil placemark
                         OTMError(viewController:self).displayErrorAlertView("Geocoding error", message: "Failed to forward geocode \(text)")
                     }
                 } else {
-                    //TODO: alertview for error - geocode to clplacemark failed
+                    // alertview for error - geocode to clplacemark failed
                     OTMError(viewController:self).displayErrorAlertView("Geocoding error", message: "Failed to forward geocode \(text)")
                 }
             }
@@ -153,7 +151,7 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
                             println("successfully posted StudentLocation to Parse")
                             self.dismissViewControllerAnimated(true, completion: nil)
                         } else {
-                            // TODO display error message to user
+                            // display error message to user
                             println("error posting StudentLocation to Parse")
                             var errorMessage = "error"
                             if let errorString = error?.localizedDescription {
@@ -177,16 +175,12 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
             
         case 1:
             // enter location. Find on the Map button.
-            //topView.hidden = false
             locationTextField.hidden = false
             mapView.hidden = true
             submitButton.hidden = true
             findOnMapButton.hidden = false
             whereAreYouStudyingTodayLabel.hidden = false
             enterLinkToShareTextField.hidden = true
-            
-//            topView.backgroundColor = UIColor.clearColor()
-//            bottomView.backgroundColor = UIColor.clearColor()
             
         case 2:
             // map. Submit button.
@@ -198,16 +192,7 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
             enterLinkToShareTextField.hidden = false
             
             topView.backgroundColor = UIColor(red: 91/255, green: 134/255, blue: 237/255, alpha: 1)
-            bottomView.backgroundColor = UIColor(white: 1, alpha: 0.3) // UIColor.clearColor() //
-            //bottomView.hidden = false
-            
-//            let y = self.view.frame.height - middleView.frame.height + 150
-//            let newHeight = self.view.frame.height - middleView.frame.origin.y
-//            middleView.frame = CGRectMake(0, middleView.frame.origin.y, self.view.frame.width, newHeight)
-//            middleView.hidden = false
-//            mapView.frame = CGRectMake(0, middleView.frame.origin.y, self.view.frame.width, newHeight)
-            
-//            constraintMapViewBottomToSuperViewBottom.constant = 0.0
+            bottomView.backgroundColor = UIColor(white: 1, alpha: 0.3)
             self.view.layoutIfNeeded()
             
         default:
@@ -297,5 +282,17 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
         
         // Tell the OS that the mapView needs to be refreshed.
         self.mapView.setNeedsDisplay()
+    }
+    
+    func startActivityIndicator() {
+        activityIndicator.center = self.view.center
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
+        view.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+    }
+    
+    func stopActivityIndicator() {
+        activityIndicator.stopAnimating()
     }
 }
