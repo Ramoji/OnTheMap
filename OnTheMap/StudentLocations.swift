@@ -27,31 +27,76 @@ class StudentLocations {
     }
     
     /*
-    @brief Get an array of student location dictionaries from Parse and update this object's studentLocations collection.
+    @brief Empty this object's collection of studentLocation objects.
     */
-    func getStudentLocations(completion: (result: Bool, errorString: String?) -> Void) {
+    func reset() {
+        studentLocations.removeAll(keepCapacity: false)
+    }
+    
+    /*
+    @brief Get an array of student location dictionaries from Parse and update this object's studentLocations collection.
+    @discussion This function will recursively call itself, retrieving a limitted number of records on each query, until all records have been acquired from the Parse service.
+    @param (in) skip - The number of records to skip when reporting results of the query. To obtain all results use 0.
+    */
+    func getStudentLocations(skip: Int, completion: (result: Bool, errorString: String?) -> Void) {
         
-        RESTClient.sharedInstance().getStudentLocations() { success, arrayOfLocationDictionaries, errorString in
+        var toSkip = skip   // number of records to skip when reporting results of the query
+        let limit = 100     // maximum number of records to return from a query
+        
+        RESTClient.sharedInstance().getStudentLocations(toSkip, limit: limit) { success, arrayOfLocationDictionaries, errorString in
             if errorString == nil {
                 if let array = arrayOfLocationDictionaries as? [[String: AnyObject]] {
                     
                     // Update collection of student locations with the new data from Parse.
                     for locationDictionary in array {
-                        // create a StudentLocation object and add it to this object's collection TODO:
+                        // create a StudentLocation object and add it to this object's collection.
                         let studentLoc = StudentLocation(dictionary: locationDictionary)
                         self.studentLocations.append(studentLoc)
                     }
                     
-                    // Send a notification indicating new student location data has been obtained from Parse.
-                    NSNotificationCenter.defaultCenter().postNotificationName(studentLocationsUpdateNotificationKey, object: self)
+                    // Call this function recursively until it the count of retrieved objects < limit. Increment skip by limit each successive query.
+                    if let count = arrayOfLocationDictionaries?.count {
+                        if count == limit {
+                            // There may be more items to retrieve. Query the next batch.
+                            toSkip += limit
+
+                            // recursive call
+                            self.getStudentLocations(toSkip) { success, errorString in
+                                if success == false {
+                                    // error retrieving locations. Some but not all locations were retrieved.
+                                    println("Error retrieving locations in recursive call to getStudentLocations() in StudentLocations.swift.")
+                                    
+                                    // Send a notification indicating new student location data has been obtained from Parse.
+                                    NSNotificationCenter.defaultCenter().postNotificationName(studentLocationsUpdateNotificationKey, object: self)
+                                    
+                                    // Fail gracefully by reporting the records that were successfully retrieved prior to the error.
+                                    completion(result:true, errorString: nil)
+                                } else {
+                                    // successfully retrieved locations, and already added to self.studentLocations.
+                                }
+                            }
+                        } else {
+                            // All items have been retrieved. Now send notification and call completion handler.
+                            
+                            // Send a notification indicating new student location data has been obtained from Parse.
+                            NSNotificationCenter.defaultCenter().postNotificationName(studentLocationsUpdateNotificationKey, object: self)
+                            
+                            completion(result:true, errorString: nil)
+                        }
+                    }
                     
-                    //TODO remove:
-                    // println("new student location data: \(array)")
+                    println("Total student locations: \(self.studentLocations.count)")
+                    
+                    // TODO: remove
+                    // Send a notification indicating new student location data has been obtained from Parse.
+                    //NSNotificationCenter.defaultCenter().postNotificationName(studentLocationsUpdateNotificationKey, object: self)
                 } else {
                     // Server responded with success, but a nil array. Do not update local studentLocations.
                     println("new student location data returned a nil array")
+                    completion(result:true, errorString: nil)
                 }
-                completion(result:true, errorString: nil)
+                // TODO: remove
+                //completion(result:true, errorString: nil)
             }
             else {
                 println("error getStudentLocations()")

@@ -89,7 +89,8 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                     self.appDelegate.loggedIn = true
                     
                     // get student locations from Parse
-                    /*TODO: Remove: self.appDelegate.*/ self.studentLocations.getStudentLocations() { success, errorString in
+                    self.studentLocations.reset()
+                    self.studentLocations.getStudentLocations(0) { success, errorString in
                         if success == false {
                             if let errorString = errorString {
                                 OTMError(viewController:self).displayErrorAlertView("Error retrieving Locations", message: errorString)

@@ -13,11 +13,18 @@ extension RESTClient {
     
     // MARK: GET Convenience Methods
     
-    func getStudentLocations(completionHandler: (success: Bool, arrayOfLocationDictionaries: [AnyObject]?, errorString: String?) -> Void) {
+    /*
+    @brief Makes a rest query to the Parse service to retrieve an array of student location dictionaries.
+    @param (in) skip - Indicates the number of results to skip when returning the list of query results. (cannot be nil).
+    @param (in) limit - The maximum number of records to return for a single query. (cannot be nil)
+    @return An array of location dictionaries in the completionHandler. success Is true if the array contains valid data, else success is false. If success is false then errorString describes the error.
+    */
+    func getStudentLocations(skip: Int, limit: Int, completionHandler: (success: Bool, arrayOfLocationDictionaries: [AnyObject]?, errorString: String?) -> Void) {
         
         /* 1. Specify parameters, method (if has {key}) */
         var parameters = [
-            "limit" : "100"
+            "limit" : String(limit),
+            "skip" : String(skip)
         ]
         
         // set up http header parameters

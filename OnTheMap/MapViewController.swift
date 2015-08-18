@@ -84,7 +84,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func onRefreshButtonTap() {
         // refresh the collection of student locations from Parse
-        /*TODO: Remove: appDelegate.*/ studentLocations.getStudentLocations() { success, errorString in
+        studentLocations.reset()
+        studentLocations.getStudentLocations(0) { success, errorString in
             if success == false {
                 if let errorString = errorString {
                     OTMError(viewController:self).displayErrorAlertView("Error retrieving Locations", message: errorString)
@@ -131,7 +132,12 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     /* Received a notification that studentLocations have been updated with new data from Parse. Recreate the pins for all locations. */
     func onStudentLocationsUpdate() {
+        // clear the pins
+        removeAllPins()
+        
+        // redraw the pins
         createPins()
+        
         println("onStudentLocationsUpdate()")
     }
     
@@ -194,6 +200,16 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         self.mapView.setNeedsDisplay()
     }
+    
+    /* 
+    @brief - Remove all annotations from the MKMapView.
+    Acknowledgement:  nielsbot, SO for filter technique to remove all but users current location.
+    */
+    func removeAllPins() {
+        let annotationsToRemove = self.mapView.annotations.filter { $0 !== self.mapView.userLocation }
+        self.mapView.removeAnnotations( annotationsToRemove )
+    }
+    
     
     // MARK: - MKMapViewDelegate
     

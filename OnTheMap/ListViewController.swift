@@ -56,13 +56,20 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.presentViewController(controller, animated: true, completion: nil);
     }
     
+    func displayInfoPostingViewController() {
+        var storyboard = UIStoryboard (name: "Main", bundle: nil)
+        var controller = storyboard.instantiateViewControllerWithIdentifier("InfoPostingProvideLocationStoryboardID") as! InfoPostingProvideLocationViewController
+        self.presentViewController(controller, animated: true, completion: nil);
+    }
+    
     func onPinButtonTap() {
-        
+        displayInfoPostingViewController()
     }
     
     func onRefreshButtonTap() {
         // refresh the collection of student locations from Parse
-        /*TODO - remove: appDelegate.*/studentLocations.getStudentLocations() { success, errorString in
+        studentLocations.reset()
+        studentLocations.getStudentLocations(0) { success, errorString in
             if success == false {
                 if let errorString = errorString {
                     OTMError(viewController:self).displayErrorAlertView("Error retrieving Locations", message: errorString)
@@ -96,22 +103,12 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     // MARK: Table View Data Source
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //TODO - remove: return appDelegate.studentLocations.count
         return studentLocations.studentLocations.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("ListViewCellID") as! UITableViewCell
-// TODO: remove
-//        let studentLocation = appDelegate.studentLocations[indexPath.row] as? [String: AnyObject]
-//
-//        // set the cell text
-//        var firstName = String(), lastName = String()
-//        if let location = studentLocation {
-//            firstName = location["firstName"] as! String
-//            lastName = location["lastName"] as! String
-//        }
         
         let studentLocation = studentLocations.studentLocations[indexPath.row]
         
