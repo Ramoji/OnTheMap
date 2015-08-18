@@ -10,6 +10,10 @@ import UIKit
 import CoreLocation
 import MapKit
 
+let LOCATION_VIEW_STATE = 1 // location text field, find on map button
+let MAP_VIEW_STATE = 2      // map view, submit button, url text field
+let BUSY_VIEW_STATE = 3     // set alpha on subviews to indicate busy state
+
 class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDelegate {
 
     var appDelegate: AppDelegate!
@@ -42,7 +46,7 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
         mapView.delegate = self
 
         // initialize the subviews
-        showViewState(1)
+        showViewState(LOCATION_VIEW_STATE)
 
         // initialize text fields
         initTextFields()
@@ -67,6 +71,8 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
             // show UIActivityViewIndicator
             startActivityIndicator()
             
+            showViewState(BUSY_VIEW_STATE)
+            
             forwardGeoCodeLocation(text) { placemark, error in
                 self.stopActivityIndicator()
                 
@@ -79,7 +85,7 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
                         self.studentLocation = self.createStudentLocation(placemark)
                         
                         // update UI state to reveal map and submit button
-                        self.showViewState(2)
+                        self.showViewState(MAP_VIEW_STATE)
                         
                         if let studentLocation = self.studentLocation {
                             self.showPinOnMap(studentLocation)
@@ -173,7 +179,7 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
     func showViewState(state: Int) {
         switch state {
             
-        case 1:
+        case LOCATION_VIEW_STATE:
             // enter location. Find on the Map button.
             locationTextField.hidden = false
             mapView.hidden = true
@@ -182,7 +188,7 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
             whereAreYouStudyingTodayLabel.hidden = false
             enterLinkToShareTextField.hidden = true
             
-        case 2:
+        case MAP_VIEW_STATE:
             // map. Submit button.
             locationTextField.hidden = true
             mapView.hidden = false
@@ -194,6 +200,11 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
             topView.backgroundColor = UIColor(red: 91/255, green: 134/255, blue: 237/255, alpha: 1)
             bottomView.backgroundColor = UIColor(white: 1, alpha: 0.3)
             self.view.layoutIfNeeded()
+        
+        case BUSY_VIEW_STATE:
+            locationTextField.alpha = 0.3
+            findOnMapButton.alpha = 0.3
+            whereAreYouStudyingTodayLabel.alpha = 0.3
             
         default:
             locationTextField.hidden = false

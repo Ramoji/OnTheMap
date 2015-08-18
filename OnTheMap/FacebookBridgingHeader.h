@@ -10,8 +10,6 @@
 #define OnTheMap_FacebookBridgingHeader_h
 
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
-//#import </Users/johnbateman/Documents/FacebookSDK/FBSDKCoreKit.framework/Headers/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
-#import <FBSDKShareKit/FBSDKShareKit.h>
 
 #endif

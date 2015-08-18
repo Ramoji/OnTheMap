@@ -21,6 +21,8 @@
 		9E4161921B62CBD2009A9D30 /* RESTConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4161911B62CBD2009A9D30 /* RESTConvenience.swift */; };
 		9E66A8511B82581F00855180 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E66A8501B82581F00855180 /* FBSDKCoreKit.framework */; };
 		9E66A8541B828D8A00855180 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E66A8531B828D8A00855180 /* FBSDKLoginKit.framework */; };
+		9E66A8551B82F5BC00855180 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E66A8501B82581F00855180 /* FBSDKCoreKit.framework */; };
+		9E66A8561B82F5BC00855180 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E66A8531B828D8A00855180 /* FBSDKLoginKit.framework */; };
 		9E923C9E1B6441DB00F2B0A7 /* StudentLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E923C9D1B6441DB00F2B0A7 /* StudentLocation.swift */; };
 		9E923CA01B65AE3A00F2B0A7 /* OTMError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E923C9F1B65AE3A00F2B0A7 /* OTMError.swift */; };
 		9E923CA31B65D3AE00F2B0A7 /* StudentLocations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E923CA21B65D3AE00F2B0A7 /* StudentLocations.swift */; };
@@ -75,6 +77,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E66A8551B82F5BC00855180 /* FBSDKCoreKit.framework in Frameworks */,
+				9E66A8561B82F5BC00855180 /* FBSDKLoginKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -458,6 +462,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
+					/Users/johnbateman/Documents/FacebookSDK,
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -477,6 +482,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
+					/Users/johnbateman/Documents/FacebookSDK,
 				);
 				INFOPLIST_FILE = OnTheMapTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
