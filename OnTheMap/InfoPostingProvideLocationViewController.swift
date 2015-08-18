@@ -5,6 +5,7 @@
 //  Created by john bateman on 7/23/15.
 //  Copyright (c) 2015 John Bateman. All rights reserved.
 //
+// This file contains the InfoPosting view controller which allows the user to enter a text description of a location, map it, add a url, and post it to Parse.
 
 import UIKit
 import CoreLocation
@@ -131,11 +132,14 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
         return StudentLocation(dictionary: placeDictionary)
     }
     
+    /* 
+    @brief Forward geocode the location string entered by the user.
+    @return Returns a Placemark object in the completion handler representing the forward geocoded location.
+    */
     func forwardGeoCodeLocation(location: String, completion: (placemark: CLPlacemark?, error: NSError?) -> Void) -> Void {
         var geoCoder = CLGeocoder()
         geoCoder.geocodeAddressString(location) { placemarks, error in
             if let placemark = placemarks?[0] as? CLPlacemark {
-                println("placemark = \(placemark)")
                 completion(placemark: placemark, error: nil)
             } else {
                 completion(placemark: nil, error: error)
@@ -143,6 +147,7 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
         }
     }
     
+    /* Submit button was selected by the user. Try to post the student location to Parse.*/
     @IBAction func onSubmitButtonTap(sender: AnyObject) {
         
         if let text = enterLinkToShareTextField.text {
@@ -152,13 +157,12 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
             } else {
                 // URL string is not empty
                 if let loc = studentLocation {
+                    // Post the student location to Parse
                     RESTClient.sharedInstance().postStudentLocationToParse(loc) {result, error in
                         if error == nil {
-                            println("successfully posted StudentLocation to Parse")
                             self.dismissViewControllerAnimated(true, completion: nil)
                         } else {
                             // display error message to user
-                            println("error posting StudentLocation to Parse")
                             var errorMessage = "error"
                             if let errorString = error?.localizedDescription {
                                 errorMessage = errorString
@@ -175,7 +179,10 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
         }
     }
     
-    /* show and hide views based on state */
+    /* 
+    @brief Show and hide views based on state.
+    @param (in) state - Should be one of the following: LOCATION_VIEW_STATE, MAP_VIEW_STATE, or BUSY_VIEW_STATE. (These states are described at the top of this file.)
+    */
     func showViewState(state: Int) {
         switch state {
             
@@ -222,8 +229,10 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
     
     // MARK: - MKMapViewDelegate
     
-    // Create an accessory view for the pin annotation callout when it is added to the map view.
-    // Make the pin color purple to identify it as a pin the user placed on the map.
+    /*
+    @brief Create an accessory view for the pin annotation callout when it is added to the map view.
+    @discussion Make the pin color purple to identify it as a pin the user placed on the map.
+    */
     func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
         
         let reuseId = "pin"
@@ -245,8 +254,10 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
     }
     
     
-    // This delegate method is implemented to respond to taps. It opens the system browser
-    // to the URL specified in the annotationViews subtitle property.
+    /*
+    @brief This delegate method is implemented to respond to taps. 
+    @discussion It opens the system browser to the URL specified in the annotationViews subtitle property.
+    */
     func mapView(mapView: MKMapView!, annotationView: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         
         if control == annotationView.rightCalloutAccessoryView {
@@ -254,6 +265,7 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
             app.openURL(NSURL(string: annotationView.annotation.subtitle!)!)
         }
     }
+    
     
     // MARK: helper functions
     

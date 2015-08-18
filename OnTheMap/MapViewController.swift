@@ -5,7 +5,10 @@
 //  Created by john bateman on 7/23/15.
 //  Copyright (c) 2015 John Bateman. All rights reserved.
 //
-//  Used code from Udacity PinSample to display annotations on the MapView
+//  Acknowledgement: Used code from Udacity PinSample to display annotations on the MapView
+//
+//  This file contains the MapViewController, the first view controller in the Tab View Controller.
+
 
 import UIKit
 import MapKit
@@ -40,6 +43,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         // Add a notification observer for updates to student location data from Parse.
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onStudentLocationsUpdate", name: studentLocationsUpdateNotificationKey, object: nil)
         
+        // Clear any existing pins before redrawing them (e.g. if navigating back to the map view from the InfoPosting view.)
+        removeAllPins()
+        
         // Draw the pins now (as it is conceivable that the notification arrived prior to the observer being registered.)
         createPins()
     }
@@ -51,6 +57,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
         if delegate.loggedIn == false {
             displayLoginViewController()
+        }
+        
+        dispatch_async(dispatch_get_main_queue()) {
+            self.mapView.setNeedsDisplay()
         }
     }
     
@@ -66,22 +76,26 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         // Dispose of any resources that can be recreated.
     }
 
+    /* Modally present the Login view controller. */
     func displayLoginViewController() {
         var storyboard = UIStoryboard (name: "Main", bundle: nil)
         var controller = storyboard.instantiateViewControllerWithIdentifier("LoginStoryboardID") as! LoginViewController
         self.presentViewController(controller, animated: true, completion: nil);
     }
 
+    /* Modally present the InfoPosting view controller. */
     func displayInfoPostingViewController() {
         var storyboard = UIStoryboard (name: "Main", bundle: nil)
         var controller = storyboard.instantiateViewControllerWithIdentifier("InfoPostingProvideLocationStoryboardID") as! InfoPostingProvideLocationViewController
         self.presentViewController(controller, animated: true, completion: nil);
     }
     
+    /* Pin button was selected. */
     func onPinButtonTap() {
         displayInfoPostingViewController()
     }
     
+    /* Refresh button was selected. */
     func onRefreshButtonTap() {
         // refresh the collection of student locations from Parse
         studentLocations.reset()
@@ -94,6 +108,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 }
             }
         }
+        
+        dispatch_async(dispatch_get_main_queue()) {
+            self.mapView.setNeedsDisplay()
+        }
     }
     
     /* logout of Facebook else logout of Udacity session */
@@ -102,24 +120,17 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         if (FBSDKAccessToken.currentAccessToken() != nil)
         {
             // User is logged in with Facebook. Log user out of Facebook.
-//            println("Confirmed user is logged in with Facebook. TODO: log user out of Facebook.")
             let loginManager = FBSDKLoginManager()
             loginManager.logOut()
             if (FBSDKAccessToken.currentAccessToken() == nil)
             {
                 self.appDelegate.loggedIn = false
-//                println("facebook logout succeeded")
             }
-//            else {
-//                println("facebook logout failed")
-//            }
-            
             self.displayLoginViewController()
         } else {
             // Udacity logout
             RESTClient.sharedInstance().logoutUdacity() {result, error in
                 if error == nil {
-                    println("successfully logged out from Udacity")
                     self.appDelegate.loggedIn = false
                     self.displayLoginViewController()
                 } else {
@@ -138,7 +149,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         // redraw the pins
         createPins()
         
-        println("onStudentLocationsUpdate()")
+        dispatch_async(dispatch_get_main_queue()) {
+            self.mapView.setNeedsDisplay()
+        }
     }
     
     /* Create an annotation for each studentLocation and display them on the map */
@@ -171,29 +184,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             // Add annotation to the annotations collection.
             annotations.append(annotation)
         }
-//        for dictionary in appDelegate.studentLocations {
-//            
-//            // get latitude and longitude from studentLocation dictionary and save as CCLocationDegree type (a Double type)
-//            let lat = CLLocationDegrees(dictionary["latitude"] as! Double)
-//            let long = CLLocationDegrees(dictionary["longitude"] as! Double)
-//            
-//            // The lat and long are used to create a CLLocationCoordinates2D instance.
-//            let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
-//            
-//            // extract the student name and url from the dictionary
-//            let first = dictionary["firstName"] as! String
-//            let last = dictionary["lastName"] as! String
-//            let url = dictionary["mediaURL"] as! String
-//            
-//            // Create the annotation, setting the coordinate, title, and subtitle properties
-//            var annotation = MKPointAnnotation()
-//            annotation.coordinate = coordinate
-//            annotation.title = "\(first) \(last)"
-//            annotation.subtitle = url
-//            
-//            // Add annotation to the annotations collection.
-//            annotations.append(annotation)
-//        }
         
         // Add the annotations to the map.
         self.mapView.addAnnotations(annotations)

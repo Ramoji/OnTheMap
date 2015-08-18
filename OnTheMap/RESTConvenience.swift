@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 John Bateman. All rights reserved.
 //
 // Udacity API for On The Map Instructions:  https://docs.google.com/document/d/1MECZgeASBDYrbBg7RlRu9zBBLGd3_kfzsN-0FtURqn0/pub?embedded=true
+//
+// This file provides an extension to RESTClient that provides a high level abstraction of the REST API calls to Udacity and Parse.
 
 import Foundation
 
@@ -29,17 +31,16 @@ extension RESTClient {
         
         // set up http header parameters
         let headerParms = [
-            "QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr" : "X-Parse-Application-Id",
-            "QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY" : "X-Parse-REST-API-Key"
+            Constants.ParseAppID : "X-Parse-Application-Id",
+            Constants.ParseApiKey : "X-Parse-REST-API-Key"
         ]
             
         /* 2. Make the request */
-        taskForGETMethod(baseUrl: Constants.parseBaseURL, method: Methods.parseGetStudentLocations, headerParameters: headerParms, queryParameters: parameters) { JSONResult, error in
-        //taskForGETMethod(Methods.AuthenticationSessionNew, parameters: parameters) { JSONResult, error in
+        taskForGETMethod(baseUrl: RESTClient.Constants.parseBaseURL, method: RESTClient.Constants.parseGetStudentLocations, headerParameters: headerParms, queryParameters: parameters) { JSONResult, error in
             
             /* 3. Send the desired value(s) to completion handler */
             if let error = error {
-                // TODO: set error string to localizedDescription in error
+                // Set error string to localizedDescription in error
                 completionHandler(success: false, arrayOfLocationDictionaries: nil, errorString: error.localizedDescription)
             } else {
                 // parse the json response which looks like the following:
@@ -83,20 +84,18 @@ extension RESTClient {
     func postStudentLocationToParse(studentLocation: StudentLocation, completionHandler: (result: Bool, error: NSError?) -> Void) {
        
         /* 1. Specify parameters, method (if has {key}) */
-//        var parameters = [
-//            "limit" : "100"
-//        ]  // TODO: cleanup if not used
+        // none
         
         // specify base URL
-        let baseURL = "https://api.parse.com/" //Constants.parseBaseURL
+        let baseURL = RESTClient.Constants.parseBaseURL
         
         // specify method
-        var mutableMethod : String = "1/classes/StudentLocation" // Methods.udacitySessionMethod
+        var mutableMethod : String = RESTClient.Constants.parseGetStudentLocations
         
         // set up http header parameters
         let headerParms = [
-            "QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr" : "X-Parse-Application-Id",
-            "QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY" : "X-Parse-REST-API-Key"
+            Constants.ParseAppID : "X-Parse-Application-Id",
+            Constants.ParseApiKey : "X-Parse-REST-API-Key"
         ]
         
         /* HTTP body
@@ -112,17 +111,7 @@ extension RESTClient {
         */
 
         // create the HTTP body
-// TODO: remove this test code
-//        let jsonBody : [String: AnyObject] = [
-//            "uniqueKey" : "1234",
-//            "firstName" : "John",
-//            "lastName" : "Doe",
-//            "mapString" : "Mountain View, CA",
-//            "mediaURL" : "https://udacity.com",
-//            "latitude" : 37.386052,
-//            "longitude" : -122.083851
-//        ]
-// TODO: enable parameterized values.
+        // enable parameterized values.
         let jsonBody : [String: AnyObject] = [
             "uniqueKey" : studentLocation.uniqueKey,
             "firstName" : studentLocation.firstName,
@@ -185,7 +174,7 @@ extension RESTClient {
         let baseURL = Constants.udacityBaseURL
         
         // specify method
-        var mutableMethod : String = Methods.udacitySessionMethod
+        var mutableMethod : String = RESTClient.Constants.udacitySessionMethod
         
         // specify HTTP body (for POST method)
             /* The Udacity http body for creating a session:
@@ -263,7 +252,8 @@ extension RESTClient {
     */
     func logoutUdacity(completionHandler: (result: Bool, error: NSError?) -> Void) {
 
-        let request = NSMutableURLRequest(URL: NSURL(string: "https://www.udacity.com/api/session")!)
+        let sessionUrl = RESTClient.Constants.udacityBaseURL + RESTClient.Constants.udacitySessionMethod
+        let request = NSMutableURLRequest(URL: NSURL(string: sessionUrl)!)
         request.HTTPMethod = "DELETE"
         var xsrfCookie: NSHTTPCookie? = nil
         let sharedCookieStorage = NSHTTPCookieStorage.sharedHTTPCookieStorage()
@@ -291,7 +281,7 @@ extension RESTClient {
                 */
 
                 let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5)) /* subset response data! */
-                println(NSString(data: newData, encoding: NSUTF8StringEncoding))
+                //println(NSString(data: newData, encoding: NSUTF8StringEncoding))
                 
                 completionHandler(result: true, error: nil)
             }

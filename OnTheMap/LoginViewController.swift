@@ -5,6 +5,7 @@
 //  Created by john bateman on 7/23/15.
 //  Copyright (c) 2015 John Bateman. All rights reserved.
 //
+// This file implements the LoginViewController which allows the user to create an account on Udacity, Login to a session on Udacity, or Login to Facebook on the device.
 
 import UIKit
 
@@ -73,15 +74,9 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         // Dispose of any resources that can be recreated.
     }
     
+    /* User selected Login button. Attempt to login to Parse. */
     @IBAction func onLoginButtonTap(sender: AnyObject) {
         startActivityIndicator()
-        
-        //let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        
-        // TODO: remove. These 2 lines are for debug convenience to avoid having to login.
-//        delegate.loggedIn = true
-//        self.dismissViewControllerAnimated(true, completion: nil)
-//        return
         
         if let username = emailTextField.text, password = passwordTextField.text {
             RESTClient.sharedInstance().loginUdacity(username: username, password: password) {result, accountKey, error in
@@ -105,41 +100,25 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                             //self.dismissViewControllerAnimated(true, completion: nil)
                             
                             self.presentMapController()
-//                            dispatch_async(dispatch_get_main_queue()) {
-//                                self.displayMapViewController()
-//                            }
                         }
                     }
-                    
-                    //self.dismissViewControllerAnimated(true, completion: nil)
                 } else {
                     self.appDelegate.loggedIn = false
                     OTMError(viewController:self).displayErrorAlertView("Login Error", message: error!.localizedDescription)
                 }
                 
                 self.presentMapController()
-//                dispatch_async(dispatch_get_main_queue()) {
-//                    self.stopActivityIndicator()
-//                }
             }
         }
     }
 
+    /* SignUp button selected. Open Udacity signup page in the Safari web browser. */
     @IBAction func onSignUpButtonTap(sender: AnyObject) {
-        if let requestUrl = NSURL(string: "https://www.udacity.com/account/auth#!/signup") {
+        let signupUrl = RESTClient.Constants.udacityBaseURL + RESTClient.Constants.udacitySignupMethod
+        if let requestUrl = NSURL(string: signupUrl) {
             UIApplication.sharedApplication().openURL(requestUrl)
         }
     }
-    
-    @IBAction func onLoginWithFacebookButtonTap(sender: AnyObject) {
-        // TODO: make login call to Facebook API
-    }
-    
-//    func displayTabBarController() {
-//        var storyboard = UIStoryboard (name: "Main", bundle: nil)
-//        var controller = storyboard.instantiateViewControllerWithIdentifier("TabBarControllerStoryboardID") as! UITabBarController
-//        self.presentViewController(controller, animated: true, completion: nil);
-//    }
     
     /* Modally present the MapViewController on the main thread. */
     func presentMapController() {
@@ -148,11 +127,6 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
             self.performSegueWithIdentifier("LoginToTabBarSegueID", sender: self)
         }
     }
-
-//    /* present the MapView controller */
-//    func displayMapViewController() {
-//        performSegueWithIdentifier("LoginToTabBarSegueID", sender: self)
-//    }
     
     /* show activity indicator */
     func startActivityIndicator() {
@@ -168,13 +142,13 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         activityIndicator.stopAnimating()
     }
     
+    
     // Facebook Delegate Methods
     
+    /* The Facebook login button was selected. Get the user's Facebook Id and transition to the Map view controller. */
     func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
         
         appDelegate.loggedIn = true
-        
-        println("User logged in to Facebook")
         
         if ((error) != nil)
         {
@@ -208,9 +182,9 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         }
     }
     
+    /* The user selected the logout facebook button. */
     func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
         appDelegate.loggedIn = false
-        println("User logged out of Facebook")
     }
     
     /* Acquire the user's Facebook user id */

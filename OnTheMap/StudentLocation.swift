@@ -5,19 +5,20 @@
 //  Created by john bateman on 7/25/15.
 //  Copyright (c) 2015 John Bateman. All rights reserved.
 //
+//  This file implements the StudentLocation class which describes a unique student location consisting of gps coordinates, the student's name, and other metadata.
 
 import Foundation
 
 struct StudentLocation {
     
-    var objectId = ""
-    var uniqueKey = ""  // Udacity account (user) id
-    var firstName = ""
-    var lastName = ""
-    var mapString = ""
-    var mediaURL = ""
-    var latitude = 0.0
-    var longitude = 0.0
+    var objectId = ""   // Parse object Id
+    var uniqueKey = ""  // Udacity account or Facebook (user) id
+    var firstName = ""  // first name of student
+    var lastName = ""   // last name of student
+    var mapString = ""  // text description of location
+    var mediaURL = ""   // url associated with the object
+    var latitude = 0.0  // gps coordinate for latitude
+    var longitude = 0.0 // gps coordinate for longitude
     
     /* designated initializer */
     init(dictionary: [String:AnyObject]) {
@@ -56,7 +57,7 @@ struct StudentLocation {
     }
 }
 
-/* example:
+/* example Dictionary:
     {
         "uniqueKey" : "1234",
         "firstName" : "Johnny",

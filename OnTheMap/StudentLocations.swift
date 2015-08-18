@@ -5,6 +5,7 @@
 //  Created by john bateman on 7/26/15.
 //  Copyright (c) 2015 John Bateman. All rights reserved.
 //
+//  This file implements the StudentLocations singleton class which manages a collection of StudentLocation objects.
 
 import Foundation
 
@@ -86,29 +87,16 @@ class StudentLocations {
                     }
                     
                     println("Total student locations: \(self.studentLocations.count)")
-                    
-                    // TODO: remove
-                    // Send a notification indicating new student location data has been obtained from Parse.
-                    //NSNotificationCenter.defaultCenter().postNotificationName(studentLocationsUpdateNotificationKey, object: self)
-                } else {
+                 } else {
                     // Server responded with success, but a nil array. Do not update local studentLocations.
                     println("new student location data returned a nil array")
                     completion(result:true, errorString: nil)
                 }
-                // TODO: remove
-                //completion(result:true, errorString: nil)
             }
             else {
                 println("error getStudentLocations()")
-                //self.displayErrorAlertView("Student Location Request Failed", message: errorString!)
                 completion(result:false, errorString: errorString)
             }
         }
-    }
-    
-    // MARK: helper functions
-    
-    func printAllStudentLocations() {
-        println("\(studentLocations)")
     }
 }

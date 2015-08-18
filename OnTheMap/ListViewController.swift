@@ -5,6 +5,7 @@
 //  Created by john bateman on 7/23/15.
 //  Copyright (c) 2015 John Bateman. All rights reserved.
 //
+//  This file contains the ListViewController which displays a list of StudentLocation objects in a ListView. The user can select a row to launch the Safari Browser to display the URL of the StudentLocation associated with the selected row.
 
 import UIKit
 
@@ -19,8 +20,6 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // TODO: register observer for studentLocation updates
         
         // Additional bar button items
         let refreshButton = UIBarButtonItem(barButtonSystemItem: .Refresh, target: self, action: "onRefreshButtonTap")
@@ -50,22 +49,26 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         // Dispose of any resources that can be recreated.
     }
 
+    /* Modally present the Login view controller */
     func displayLoginViewController() {
         var storyboard = UIStoryboard (name: "Main", bundle: nil)
         var controller = storyboard.instantiateViewControllerWithIdentifier("LoginStoryboardID") as! LoginViewController
         self.presentViewController(controller, animated: true, completion: nil);
     }
     
+    /* Modally present the InfoPosting view controller */
     func displayInfoPostingViewController() {
         var storyboard = UIStoryboard (name: "Main", bundle: nil)
         var controller = storyboard.instantiateViewControllerWithIdentifier("InfoPostingProvideLocationStoryboardID") as! InfoPostingProvideLocationViewController
         self.presentViewController(controller, animated: true, completion: nil);
     }
     
+    /* The Pin button was selected. */
     func onPinButtonTap() {
         displayInfoPostingViewController()
     }
     
+    /* The Refresh button was selected. */
     func onRefreshButtonTap() {
         // refresh the collection of student locations from Parse
         studentLocations.reset()
@@ -84,12 +87,10 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBAction func onLogoutButtonTap(sender: AnyObject) {
         RESTClient.sharedInstance().logoutUdacity() {result, error in
             if error == nil {
-                println("successfully logged out from Udacity")
                 self.appDelegate.loggedIn = false
                 self.displayLoginViewController()
             } else {
-                println("Udacity logout failed")
-                // TODO: display alertView error
+                
             }
         }
     }
@@ -97,15 +98,17 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     /* Received a notification that studentLocations have been updated with new data from Parse. Recreate the pins for all locations. */
     func onStudentLocationsUpdate() {
         self.tableView.reloadData()
-        println("onStudentLocationsUpdate()")
     }
+    
     
     // MARK: Table View Data Source
     
+    /* return the row count */
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return studentLocations.studentLocations.count
     }
     
+    /* return a cell for the requested row */
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("ListViewCellID") as! UITableViewCell
@@ -120,14 +123,13 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         return cell
     }
     
+    
     // MARK: Table View Delegate
     
+    /* User selected a row. Open the associated url stored in studentLocation in the Safari browser. */
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         // open student's url in Safari browser
-//        let studentLocation: [String: AnyObject] = appDelegate.studentLocations[indexPath.row] as! [String : AnyObject]
-//        let url = studentLocation["mediaURL"] as! String
-        
         let studentLocation = studentLocations.studentLocations[indexPath.row]
         let url = studentLocation.mediaURL
         

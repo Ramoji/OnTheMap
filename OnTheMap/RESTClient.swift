@@ -15,14 +15,6 @@ class RESTClient {
     /* Shared session */
     var session: NSURLSession
     
-//    /* Configuration object */
-//    var config = TMDBConfig()
-//    
-//    /* Authentication state */
-//    var sessionID : String? = nil
-//    var userID : Int? = nil
-    
-    
     // MARK: - Shared Instance
     
     /* Instantiate a single instance of the RESTClient. */
@@ -48,14 +40,12 @@ class RESTClient {
         if let params = queryParameters {
             mutableParameters = params
         }
-        //mutableParameters[ParameterKeys.ApiKey] = apiKey
         
         /* 2/3. Build the URL and configure the request */
         var urlString = baseUrl + method
         if mutableParameters.count > 0 {
             urlString += RESTClient.escapedParameters(mutableParameters)
         }
-//        let urlString = baseUrl + method + RESTClient.escapedParameters(mutableParameters)
         let url = NSURL(string: urlString)!
         let request = NSMutableURLRequest(URL: url)
         
@@ -70,7 +60,7 @@ class RESTClient {
             /* 5/6. Parse the data and use the data (happens in completion handler) */
             if let error = downloadError {
                 let newError = RESTClient.errorForData(data, response: response, error: error)
-                completionHandler(result: nil, error: newError) //TODO: downloadError instead of newError?
+                completionHandler(result: nil, error: newError)
             } else {
                 RESTClient.parseJSONWithCompletionHandler(data, completionHandler: completionHandler)
             }
@@ -91,7 +81,7 @@ class RESTClient {
             mutableParameters = params
         }
         if apiKey != "" {
-            mutableParameters[ParameterKeys.ApiKey] = apiKey
+            mutableParameters["api_key"/*ParameterKeys.ApiKey*/] = apiKey
         }
         
         /* 2/3. Build the URL and configure the request */
@@ -128,7 +118,6 @@ class RESTClient {
                 // ignore first 5 characters for Udacity responses
                 if baseUrl == Constants.udacityBaseURL {
                     returnData = data.subdataWithRange(NSMakeRange(5, data.length - 5)) /* subset response data! */
-                    //println(NSString(data: returnData, encoding: NSUTF8StringEncoding)) // TODO: remove this debug line
                 }
                 
                 RESTClient.parseJSONWithCompletionHandler(returnData, completionHandler: completionHandler)
@@ -146,7 +135,7 @@ class RESTClient {
         
         if let parsedResult = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments, error: nil) as? [String : AnyObject] {
             
-            if let errorMessage = parsedResult[RESTClient.JSONResponseKeys.StatusMessage] as? String {
+            if let errorMessage = parsedResult["status_message"] as? String {
                 
                 let userInfo = [NSLocalizedDescriptionKey : errorMessage]
                 
