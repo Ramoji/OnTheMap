@@ -71,21 +71,6 @@
                                     <action selector="onSignUpButtonTap:" destination="S4X-hP-qM2" eventType="touchUpInside" id="Gfd-4p-BpH"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xAJ-ck-yZh">
-                                <rect key="frame" x="16" y="440" width="568" height="40"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="Fky-d4-Vxq"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
-                                <state key="normal" title="Log in with Facebook">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="onLoginWithFacebookButtonTap:" destination="S4X-hP-qM2" eventType="touchUpInside" id="W0D-sN-tFO"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Login to Udacity" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9dj-kq-k0W">
                                 <rect key="frame" x="194" y="202" width="212" height="21"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -93,8 +78,12 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eLs-kT-HMz" customClass="FBSDKLoginButton">
+                                <rect key="frame" x="16" y="433" width="568" height="40"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
-                        <color key="backgroundColor" red="0.94117647059999998" green="0.66666666669999997" blue="0.16751254560000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.92156862745098034" green="0.60784313725490191" blue="0.15294117647058825" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="centerX" secondItem="aiR-uE-2es" secondAttribute="centerX" id="13T-6e-fcJ"/>
                             <constraint firstItem="9dj-kq-k0W" firstAttribute="top" secondItem="1zO-Io-Jja" secondAttribute="bottom" constant="3" id="1Kz-5Q-Xwh"/>
@@ -103,23 +92,23 @@
                             <constraint firstAttribute="centerX" secondItem="1zO-Io-Jja" secondAttribute="centerX" constant="4.5" id="69J-Dz-u1x"/>
                             <constraint firstAttribute="trailing" secondItem="ngf-4W-CXn" secondAttribute="trailing" constant="16" id="9UR-Xa-x8g"/>
                             <constraint firstItem="aiR-uE-2es" firstAttribute="leading" secondItem="yRb-ze-A4r" secondAttribute="leading" constant="16" id="AAb-07-XcZ"/>
-                            <constraint firstAttribute="trailing" secondItem="xAJ-ck-yZh" secondAttribute="trailing" constant="16" id="BQM-EZ-2l1"/>
+                            <constraint firstItem="eLs-kT-HMz" firstAttribute="top" secondItem="Zo3-LB-fpA" secondAttribute="bottom" constant="3" id="CXC-Zr-8Y0"/>
                             <constraint firstAttribute="centerX" secondItem="t5h-B9-PkT" secondAttribute="centerX" id="EIZ-AH-0Ye"/>
                             <constraint firstAttribute="trailing" secondItem="Zo3-LB-fpA" secondAttribute="trailing" constant="16" id="FmH-Iv-bR1"/>
                             <constraint firstItem="ngf-4W-CXn" firstAttribute="top" secondItem="aiR-uE-2es" secondAttribute="bottom" constant="10" id="Jhc-1e-qR7"/>
+                            <constraint firstAttribute="trailing" secondItem="eLs-kT-HMz" secondAttribute="trailing" constant="16" id="KJs-am-Zul"/>
                             <constraint firstItem="Zo3-LB-fpA" firstAttribute="leading" secondItem="yRb-ze-A4r" secondAttribute="leading" constant="18" id="MN6-m1-qWC"/>
                             <constraint firstAttribute="centerX" secondItem="9dj-kq-k0W" secondAttribute="centerX" id="NG5-RZ-hIU"/>
                             <constraint firstItem="1zO-Io-Jja" firstAttribute="top" secondItem="jhm-C8-2zY" secondAttribute="bottom" constant="56" id="NM8-eG-btL"/>
-                            <constraint firstItem="xAJ-ck-yZh" firstAttribute="top" secondItem="Zo3-LB-fpA" secondAttribute="bottom" constant="10" id="OT0-6Z-7Ri"/>
                             <constraint firstAttribute="trailing" secondItem="t5h-B9-PkT" secondAttribute="trailing" constant="16" id="Q8g-aR-bWN"/>
                             <constraint firstAttribute="centerX" secondItem="ngf-4W-CXn" secondAttribute="centerX" id="Sx8-kb-bzM"/>
+                            <constraint firstAttribute="centerX" secondItem="eLs-kT-HMz" secondAttribute="centerX" id="TUg-nV-bfc"/>
                             <constraint firstItem="t5h-B9-PkT" firstAttribute="top" secondItem="9dj-kq-k0W" secondAttribute="bottom" constant="17" id="a2d-WK-zPu"/>
                             <constraint firstItem="ngf-4W-CXn" firstAttribute="top" secondItem="aiR-uE-2es" secondAttribute="bottom" constant="10" id="fhd-KJ-fOz"/>
-                            <constraint firstAttribute="centerX" secondItem="xAJ-ck-yZh" secondAttribute="centerX" id="kWt-hV-Jau"/>
                             <constraint firstItem="Zo3-LB-fpA" firstAttribute="top" secondItem="ngf-4W-CXn" secondAttribute="bottom" constant="10" id="nBE-A4-tAA"/>
+                            <constraint firstItem="eLs-kT-HMz" firstAttribute="leading" secondItem="yRb-ze-A4r" secondAttribute="leading" constant="16" id="pnL-U4-XT8"/>
                             <constraint firstItem="aiR-uE-2es" firstAttribute="top" secondItem="t5h-B9-PkT" secondAttribute="bottom" constant="10" id="tEO-kc-9Al"/>
                             <constraint firstAttribute="trailing" secondItem="aiR-uE-2es" secondAttribute="trailing" constant="16" id="w0S-s5-JMd"/>
-                            <constraint firstItem="xAJ-ck-yZh" firstAttribute="leading" secondItem="yRb-ze-A4r" secondAttribute="leading" constant="16" id="w1x-Wy-fHr"/>
                             <constraint firstItem="aiR-uE-2es" firstAttribute="top" secondItem="t5h-B9-PkT" secondAttribute="bottom" constant="10" id="yGC-l7-w7e"/>
                             <constraint firstItem="t5h-B9-PkT" firstAttribute="top" secondItem="9dj-kq-k0W" secondAttribute="bottom" constant="22" id="ylV-jJ-EWS"/>
                             <constraint firstItem="t5h-B9-PkT" firstAttribute="leading" secondItem="yRb-ze-A4r" secondAttribute="leading" constant="16" id="zo4-af-Erj"/>
@@ -132,6 +121,7 @@
                     </view>
                     <connections>
                         <outlet property="emailTextField" destination="t5h-B9-PkT" id="Yw5-qA-fzs"/>
+                        <outlet property="loginButton" destination="eLs-kT-HMz" id="D1H-dV-7QM"/>
                         <outlet property="passwordTextField" destination="aiR-uE-2es" id="R3u-RC-LIC"/>
                         <segue destination="49e-Tb-3d3" kind="show" identifier="LoginToTabBarSegueID" id="1Eo-3A-aMK"/>
                     </connections>

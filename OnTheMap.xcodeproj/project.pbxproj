@@ -19,6 +19,8 @@
 		9E41618D1B62BCFA009A9D30 /* RESTClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E41618C1B62BCFA009A9D30 /* RESTClient.swift */; };
 		9E41618F1B62BDEB009A9D30 /* RESTConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E41618E1B62BDEB009A9D30 /* RESTConstants.swift */; };
 		9E4161921B62CBD2009A9D30 /* RESTConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4161911B62CBD2009A9D30 /* RESTConvenience.swift */; };
+		9E66A8511B82581F00855180 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E66A8501B82581F00855180 /* FBSDKCoreKit.framework */; };
+		9E66A8541B828D8A00855180 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E66A8531B828D8A00855180 /* FBSDKLoginKit.framework */; };
 		9E923C9E1B6441DB00F2B0A7 /* StudentLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E923C9D1B6441DB00F2B0A7 /* StudentLocation.swift */; };
 		9E923CA01B65AE3A00F2B0A7 /* OTMError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E923C9F1B65AE3A00F2B0A7 /* OTMError.swift */; };
 		9E923CA31B65D3AE00F2B0A7 /* StudentLocations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E923CA21B65D3AE00F2B0A7 /* StudentLocations.swift */; };
@@ -51,6 +53,9 @@
 		9E41618C1B62BCFA009A9D30 /* RESTClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RESTClient.swift; sourceTree = "<group>"; };
 		9E41618E1B62BDEB009A9D30 /* RESTConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RESTConstants.swift; sourceTree = "<group>"; };
 		9E4161911B62CBD2009A9D30 /* RESTConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RESTConvenience.swift; sourceTree = "<group>"; };
+		9E66A8501B82581F00855180 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../../../../Documents/FacebookSDK/FBSDKCoreKit.framework; sourceTree = "<group>"; };
+		9E66A8521B825A4C00855180 /* FacebookBridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FacebookBridgingHeader.h; sourceTree = "<group>"; };
+		9E66A8531B828D8A00855180 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../../../../Documents/FacebookSDK/FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		9E923C9D1B6441DB00F2B0A7 /* StudentLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentLocation.swift; sourceTree = "<group>"; };
 		9E923C9F1B65AE3A00F2B0A7 /* OTMError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMError.swift; sourceTree = "<group>"; };
 		9E923CA21B65D3AE00F2B0A7 /* StudentLocations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentLocations.swift; sourceTree = "<group>"; };
@@ -61,6 +66,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E66A8541B828D8A00855180 /* FBSDKLoginKit.framework in Frameworks */,
+				9E66A8511B82581F00855180 /* FBSDKCoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +85,7 @@
 			isa = PBXGroup;
 			children = (
 				9E4161601B61855D009A9D30 /* OnTheMap */,
+				9E66A84F1B82581100855180 /* Frameworks */,
 				9E4161781B61855D009A9D30 /* OnTheMapTests */,
 				9E41615F1B61855D009A9D30 /* Products */,
 			);
@@ -104,6 +112,7 @@
 				9E41616C1B61855D009A9D30 /* Images.xcassets */,
 				9E41616E1B61855D009A9D30 /* LaunchScreen.xib */,
 				9E4161611B61855D009A9D30 /* Supporting Files */,
+				9E66A8521B825A4C00855180 /* FacebookBridgingHeader.h */,
 			);
 			path = OnTheMap;
 			sourceTree = "<group>";
@@ -141,6 +150,15 @@
 				9E4161911B62CBD2009A9D30 /* RESTConvenience.swift */,
 			);
 			name = REST;
+			sourceTree = "<group>";
+		};
+		9E66A84F1B82581100855180 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9E66A8531B828D8A00855180 /* FBSDKLoginKit.framework */,
+				9E66A8501B82581F00855180 /* FBSDKCoreKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		9E923CA11B65D38C00F2B0A7 /* Model */ = {
@@ -337,6 +355,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = /Users/johnbateman/Documents/FacebookSDK/;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -356,6 +375,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = OnTheMap/FacebookBridgingHeader.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -382,6 +402,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = /Users/johnbateman/Documents/FacebookSDK/;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -393,6 +414,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = OnTheMap/FacebookBridgingHeader.h;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -402,6 +424,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/johnbateman/Documents/FacebookSDK,
+				);
 				INFOPLIST_FILE = OnTheMap/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -414,6 +440,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/johnbateman/Documents/FacebookSDK,
+				);
 				INFOPLIST_FILE = OnTheMap/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

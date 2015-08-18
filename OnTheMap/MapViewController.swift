@@ -95,16 +95,36 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-    /* logout of Udacity session */
+    /* logout of Facebook else logout of Udacity session */
     @IBAction func onLogoutButtonTap(sender: AnyObject) {
-        RESTClient.sharedInstance().logoutUdacity() {result, error in
-            if error == nil {
-                println("successfully logged out from Udacity")
+        // Facebook logout
+        if (FBSDKAccessToken.currentAccessToken() != nil)
+        {
+            // User is logged in with Facebook. Log user out of Facebook.
+//            println("Confirmed user is logged in with Facebook. TODO: log user out of Facebook.")
+            let loginManager = FBSDKLoginManager()
+            loginManager.logOut()
+            if (FBSDKAccessToken.currentAccessToken() == nil)
+            {
                 self.appDelegate.loggedIn = false
-                self.displayLoginViewController()
-            } else {
-                println("Udacity logout failed")
-                // no display to user
+//                println("facebook logout succeeded")
+            }
+//            else {
+//                println("facebook logout failed")
+//            }
+            
+            self.displayLoginViewController()
+        } else {
+            // Udacity logout
+            RESTClient.sharedInstance().logoutUdacity() {result, error in
+                if error == nil {
+                    println("successfully logged out from Udacity")
+                    self.appDelegate.loggedIn = false
+                    self.displayLoginViewController()
+                } else {
+                    println("Udacity logout failed")
+                    // no display to user
+                }
             }
         }
     }

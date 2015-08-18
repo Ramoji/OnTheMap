@@ -64,7 +64,7 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
     /* Attempt to forward geocode the address entered by the user. If that works drop a pin on the map. */
     @IBAction func findOnMapButtonTap(sender: AnyObject) {
         if let text = locationTextField.text {
-            // show UIActivityViewIndicator (storyboard, show,hide approach)
+            // show UIActivityViewIndicator
             startActivityIndicator()
             
             forwardGeoCodeLocation(text) { placemark, error in
@@ -284,6 +284,7 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
         self.mapView.setNeedsDisplay()
     }
     
+    /* show activity indicator */
     func startActivityIndicator() {
         activityIndicator.center = self.view.center
         activityIndicator.hidesWhenStopped = true
@@ -292,6 +293,7 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
         activityIndicator.startAnimating()
     }
     
+    /* hide acitivity indicator */
     func stopActivityIndicator() {
         activityIndicator.stopAnimating()
     }
