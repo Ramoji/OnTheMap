@@ -15,8 +15,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     /* true if the user has loggedIn to Udacity, else false */
     var loggedIn = false
     
+    /* student location information for the currently logged in user */
+    var loggedInUser: StudentLocation?
+    
     /* logged in user's accountKey */
-    var userAccountKey: String = ""
+    //var userAccountKey: String = ""
     
     var window: UIWindow?
     

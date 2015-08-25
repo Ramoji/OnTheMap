@@ -106,11 +106,20 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
     
     /* Create a StudentLocation object. */
     func createStudentLocation(placemark: CLPlacemark) -> StudentLocation {
+        
+        // Get the Udacity key for the logged in user that was saved upon successful login.
+        var uniqueKey = ""
+        if let loggedInUser = appDelegate.loggedInUser {
+            uniqueKey = loggedInUser.uniqueKey
+        }
+        
+        // TODO - cleanup comments >
+        // Create a placeDictionary with the user's Udacity login credentials and the url the user just entered on this screen.
         var placeDictionary: [String: AnyObject] = [
-            "uniqueKey" : appDelegate.userAccountKey,
-            "firstName" : "Racer",
-            "lastName" : "X",
-            "mediaURL" : "https://udacity.com",
+            "uniqueKey" : uniqueKey,
+            "firstName" : self.appDelegate.loggedInUser!.firstName,
+            "lastName" : self.appDelegate.loggedInUser!.lastName,
+            "mediaURL" : enterLinkToShareTextField.text,
             "latitude" : placemark.location.coordinate.latitude,
             "longitude" : placemark.location.coordinate.longitude
         ]
@@ -156,7 +165,12 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
                 OTMError(viewController:self).displayErrorAlertView("Forgot Link", message: "Please provide a link to a website and reselect submit.")
             } else {
                 // URL string is not empty
-                if let loc = studentLocation {
+                if var loc = studentLocation {
+                    
+                    // Save the link entered by the user in the StudentLocation data structure.
+                    loc.mediaURL = text
+                    self.studentLocation?.mediaURL = text
+                    
                     // Post the student location to Parse
                     RESTClient.sharedInstance().postStudentLocationToParse(loc) {result, error in
                         if error == nil {
@@ -175,7 +189,7 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
             
         } else {
             // url string is nil
-            OTMError(viewController:self).displayErrorAlertView("Forgot Link", message: "Pleaes provide a link to a website and reselect submit.")
+            OTMError(viewController:self).displayErrorAlertView("Forgot Link", message: "Please provide a link to a website and reselect submit.")
         }
     }
     
@@ -262,7 +276,11 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
         
         if control == annotationView.rightCalloutAccessoryView {
             let app = UIApplication.sharedApplication()
-            app.openURL(NSURL(string: annotationView.annotation.subtitle!)!)
+            if let link = annotationView.annotation.subtitle {
+                if let url = NSURL(string: link) {
+                    app.openURL(url)
+                }
+            }
         }
     }
     

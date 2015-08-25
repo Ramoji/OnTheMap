@@ -25,6 +25,7 @@ extension RESTClient {
         /* Udacity methods */
         static let udacitySessionMethod : String = "api/session"
         static let udacitySignupMethod : String = "account/auth#!/signup"
+        static let udacityGetUserMethod : String = "api/users/"
         
         /* Parse methods */
         static let parseGetStudentLocations : String = "1/classes/StudentLocation"

@@ -62,7 +62,15 @@ class RESTClient {
                 let newError = RESTClient.errorForData(data, response: response, error: error)
                 completionHandler(result: nil, error: newError)
             } else {
-                RESTClient.parseJSONWithCompletionHandler(data, completionHandler: completionHandler)
+                // success
+                var returnData = data
+                
+                // ignore first 5 characters for Udacity responses
+                if baseUrl == Constants.udacityBaseURL {
+                    returnData = data.subdataWithRange(NSMakeRange(5, data.length - 5)) /* subset response data! */
+                }
+                
+                RESTClient.parseJSONWithCompletionHandler(returnData, completionHandler: completionHandler)
             }
         }
         

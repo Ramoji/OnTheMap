@@ -72,6 +72,83 @@ extension RESTClient {
         }
     }
     
+    /*
+    @brief Get Udacity user information for the specified userID.
+    @discussion Parses the user information returned from the Udacity REST api into a StudentLocation object.
+    @param (in) userID - The Udacity user account ID. (cannot be nil)
+    @return StudentLocation object containing user information returned from the Udacity service, else nil if an error occurred.
+    */
+    func getUdacityUser(#userID: String, completionHandler: (result: Bool, studentLocation: StudentLocation?, error: NSError?) -> Void) {
+        
+        /* 1. Specify parameters */
+        // none
+        
+        // set up http header parameters
+        let headerParms = [
+            Constants.ParseAppID : "X-Parse-Application-Id",
+            Constants.ParseApiKey : "X-Parse-REST-API-Key"
+        ]
+        
+        /* 2. Make the request */
+        taskForGETMethod(baseUrl: RESTClient.Constants.udacityBaseURL, method: RESTClient.Constants.udacityGetUserMethod + userID, headerParameters: headerParms, queryParameters: nil) { JSONResult, error in
+            
+            /* 3. Send the desired value(s) to completion handler */
+            if let error = error {
+                // didn't work. bubble up error.
+                completionHandler(result: false, studentLocation: nil, error: error)
+            } else {
+                // parse the json response which looks like the following:
+                /*
+                {
+                "user":{
+                "last_name":"Doe",
+                "social_accounts":[
+                ],
+                "mailing_address":null,
+                ...,
+                "_facebook_id":null,
+                ...,
+                "first_name":"John",
+                ...,
+                "location":null,
+                ...,
+                "email":{
+                ...,
+                "_verified":true,
+                "address":"john.doe.udacity.user@gmail.com"
+                },
+                "website_url":null,
+                ...,
+                "key":"3903878747",
+                ...,
+                "_image_url":"//robohash.org/udacity-3903878747.png"
+                }
+                }
+                */
+                var userLocation = StudentLocation()
+                userLocation.uniqueKey = userID
+                if let userDictionary = JSONResult.valueForKey("user") as? [String: AnyObject] {
+                    if let lastName = userDictionary["last_name"] as? String {
+                        userLocation.lastName = lastName
+                    }
+                    if let firstName = userDictionary["first_name"] as? String {
+                        userLocation.firstName = firstName
+                    }
+                    if let url = userDictionary["website_url"] as? String{
+                        userLocation.mediaURL = url
+                    }
+                    if let key = userDictionary["key"] as? String {
+                        userLocation.uniqueKey = key
+                    }
+                    completionHandler(result: true, studentLocation: userLocation, error: nil)
+                } else {
+                    completionHandler(result: false, studentLocation: nil, error: error)
+                }
+            }
+        }
+    }
+    
+    
     // MARK: POST Convenience Methods
 
     /*
@@ -288,5 +365,6 @@ extension RESTClient {
         }
         task.resume()
     }
+    
 }
     

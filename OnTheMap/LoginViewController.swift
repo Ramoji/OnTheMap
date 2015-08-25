@@ -83,21 +83,29 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                 if error == nil {
                     self.appDelegate.loggedIn = true
                     
+                    // Get the logged in user's data from the Udacity service and store the relevant elements in a studentLocation variable for retrieval later when we post the user's data to Parse.
+                    self.getLoggedInUserData(userAccountKey: accountKey) { success, studentLocation, error in
+                        if error == nil {
+                            // got valid user data back, so save it
+                            self.appDelegate.loggedInUser = studentLocation
+                        } else {
+                            // didn't get valid data back so set to default values
+                            self.appDelegate.loggedInUser = StudentLocation()
+                        }
+                    }
+                    
                     // get student locations from Parse
                     self.studentLocations.reset()
                     self.studentLocations.getStudentLocations(0) { success, errorString in
                         if success == false {
                             if let errorString = errorString {
                                 OTMError(viewController:self).displayErrorAlertView("Error retrieving Locations", message: errorString)
-                                //self.dismissViewControllerAnimated(true, completion: nil)
                             } else {
                                 OTMError(viewController:self).displayErrorAlertView("Error retrieving Locations", message: "Unknown error")
-                                //self.dismissViewControllerAnimated(true, completion: nil)
                             }
                         } else {
                             // successfully logged in - save the user's account key
-                            self.appDelegate.userAccountKey = accountKey
-                            //self.dismissViewControllerAnimated(true, completion: nil)
+                            self.appDelegate.loggedInUser?.uniqueKey = accountKey
                             
                             self.presentMapController()
                         }
@@ -108,6 +116,23 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                 }
                 
                 self.presentMapController()
+            }
+        }
+    }
+    
+    /* 
+    @brief Get user data for logged in user 
+    @param (in) userAccountKey: The Udacity account key for the user account.
+    */
+    func getLoggedInUserData(#userAccountKey: String, completion: (success: Bool, studentLocation: StudentLocation?, error: NSError?) -> Void) {
+        
+        RESTClient.sharedInstance().getUdacityUser(userID: userAccountKey) { result, studentLocation, error in
+            if error == nil {
+                completion(success: true, studentLocation: studentLocation, error: nil)
+            }
+            else {
+                println("error getUdacityUser()")
+                completion(success: false, studentLocation: nil, error: error)
             }
         }
     }
@@ -191,6 +216,6 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     func getFacebookUserID() {
         //let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let fbToken = FBSDKAccessToken.currentAccessToken()
-        appDelegate.userAccountKey = fbToken.userID
+        self.appDelegate.loggedInUser?.uniqueKey = fbToken.userID
     }
 }

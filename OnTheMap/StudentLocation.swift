@@ -21,6 +21,11 @@ struct StudentLocation {
     var longitude = 0.0 // gps coordinate for longitude
     
     /* designated initializer */
+    init() {
+        // just initialize with defaults.
+    }
+    
+    /* designated initializer */
     init(dictionary: [String:AnyObject]) {
         
         if let id = dictionary["objectId"] as? String {
