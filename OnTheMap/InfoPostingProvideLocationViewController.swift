@@ -15,9 +15,10 @@ let LOCATION_VIEW_STATE = 1 // location text field, find on map button
 let MAP_VIEW_STATE = 2      // map view, submit button, url text field
 let BUSY_VIEW_STATE = 3     // set alpha on subviews to indicate busy state
 
-class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDelegate {
+class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate {
 
     var appDelegate: AppDelegate!
+    var tapRecognizer: UITapGestureRecognizer? = nil
     
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var middleView: UIView!
@@ -51,10 +52,23 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
 
         // initialize text fields
         initTextFields()
+        
+        // Initialize the tapRecognizer
+        initTapRecognizer()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
+        // Add the tapRecognizer
+        addKeyboardDismissRecognizer()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        // Remove the tapRecognizer
+        removeKeyboardDismissRecognizer()
     }
 
     override func didReceiveMemoryWarning() {
@@ -289,6 +303,10 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
     
     /* Configure initial text attributes on text fields */
     func initTextFields() {
+        
+        locationTextField.delegate = self
+        enterLinkToShareTextField.delegate = self
+        
         // set attributes of placeholder text on text fields
         locationTextField.attributedPlaceholder = NSAttributedString(string: "Enter Your Location Here", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor()])
         enterLinkToShareTextField.attributedPlaceholder = NSAttributedString(string: "Enter a Link to Share Here", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor()])
@@ -337,5 +355,46 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
     /* hide acitivity indicator */
     func stopActivityIndicator() {
         activityIndicator.stopAnimating()
+    }
+    
+    
+    // MARK: Text View Delegate Methods
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        // hide keyboard when Return is selected while editing a text field
+        locationTextField.resignFirstResponder()
+        enterLinkToShareTextField.resignFirstResponder()
+        return true;
+    }
+    
+    
+    // MARK: Tap gesture recognizer
+    
+    func initTapRecognizer() {
+        tapRecognizer = UITapGestureRecognizer(target: self, action:Selector("handleSingleTap:"))
+        tapRecognizer?.numberOfTapsRequired = 1
+    }
+    
+    // Add the recognizer to dismiss the keyboard
+    func addKeyboardDismissRecognizer() {
+        
+        if let tapRecog = tapRecognizer {
+            // tapRecog.delegate = self
+            self.view.addGestureRecognizer(tapRecog)
+        }
+        self.view.userInteractionEnabled = true
+    }
+    
+    // remove the tap gesture recognizer
+    func removeKeyboardDismissRecognizer() {
+        
+        if let tapRecog = tapRecognizer {
+            view.removeGestureRecognizer(tapRecog)
+        }
+    }
+    
+    // User tapped somewhere on the view. End editing.
+    func handleSingleTap(recognizer: UITapGestureRecognizer) {
+        self.view.endEditing(true)
     }
 }

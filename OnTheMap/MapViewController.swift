@@ -22,6 +22,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     @IBOutlet weak var mapView: MKMapView!
     
+    var activityIndicator : UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRectMake(0, 0, 50, 50)) as UIActivityIndicatorView
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -76,19 +78,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         // Dispose of any resources that can be recreated.
     }
 
-    /* Modally present the Login view controller. */
-    func displayLoginViewController() {
-        var storyboard = UIStoryboard (name: "Main", bundle: nil)
-        var controller = storyboard.instantiateViewControllerWithIdentifier("LoginStoryboardID") as! LoginViewController
-        self.presentViewController(controller, animated: true, completion: nil);
-    }
-
-    /* Modally present the InfoPosting view controller. */
-    func displayInfoPostingViewController() {
-        var storyboard = UIStoryboard (name: "Main", bundle: nil)
-        var controller = storyboard.instantiateViewControllerWithIdentifier("InfoPostingProvideLocationStoryboardID") as! InfoPostingProvideLocationViewController
-        self.presentViewController(controller, animated: true, completion: nil);
-    }
+    
+    // MARK: button handlers
     
     /* Pin button was selected. */
     func onPinButtonTap() {
@@ -116,6 +107,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     /* logout of Facebook else logout of Udacity session */
     @IBAction func onLogoutButtonTap(sender: AnyObject) {
+        startActivityIndicator()
+        
         // Facebook logout
         if (FBSDKAccessToken.currentAccessToken() != nil)
         {
@@ -126,11 +119,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             {
                 self.appDelegate.loggedIn = false
             }
+            self.stopActivityIndicator()
             self.displayLoginViewController()
         } else {
             // Udacity logout
             RESTClient.sharedInstance().logoutUdacity() {result, error in
+                self.stopActivityIndicator()
                 if error == nil {
+                    // successfully logged out
                     self.appDelegate.loggedIn = false
                     self.displayLoginViewController()
                 } else {
@@ -141,18 +137,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-    /* Received a notification that studentLocations have been updated with new data from Parse. Recreate the pins for all locations. */
-    func onStudentLocationsUpdate() {
-        // clear the pins
-        removeAllPins()
-        
-        // redraw the pins
-        createPins()
-        
-        dispatch_async(dispatch_get_main_queue()) {
-            self.mapView.setNeedsDisplay()
-        }
-    }
+    
+    // MARK: Manage map annotations
     
     /* Create an annotation for each studentLocation and display them on the map */
     func createPins() {
@@ -201,7 +187,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
-    // MARK: - MKMapViewDelegate
+    // MARK: MKMapViewDelegate
     
     // Create an accessory view for the pin annotation callout when it is added to the map view
     func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
@@ -231,12 +217,70 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         if control == annotationView.rightCalloutAccessoryView {
             if let urlString = annotationView.annotation.subtitle {
-                if let requestUrl = NSURL(string: urlString) {
-                    UIApplication.sharedApplication().openURL(requestUrl)
-                }
+                showUrlInEmbeddedBrowser(urlString)
             }
         }
+    }
+    
+    
+    // MARK: Helper functions
+    
+    /* Received a notification that studentLocations have been updated with new data from Parse. Recreate the pins for all locations. */
+    func onStudentLocationsUpdate() {
+        // clear the pins
+        removeAllPins()
+        
+        // redraw the pins
+        createPins()
+        
+        dispatch_async(dispatch_get_main_queue()) {
+            self.mapView.setNeedsDisplay()
+        }
+    }
+    
+    /* Modally present the Login view controller. */
+    func displayLoginViewController() {
+        var storyboard = UIStoryboard (name: "Main", bundle: nil)
+        var controller = storyboard.instantiateViewControllerWithIdentifier("LoginStoryboardID") as! LoginViewController
+        self.presentViewController(controller, animated: true, completion: nil);
+    }
+    
+    /* Modally present the InfoPosting view controller. */
+    func displayInfoPostingViewController() {
+        var storyboard = UIStoryboard (name: "Main", bundle: nil)
+        var controller = storyboard.instantiateViewControllerWithIdentifier("InfoPostingProvideLocationStoryboardID") as! InfoPostingProvideLocationViewController
+        self.presentViewController(controller, animated: true, completion: nil);
+    }
+    
+    /* show activity indicator */
+    func startActivityIndicator() {
+        activityIndicator.center = self.view.center
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
+        view.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+    }
+    
+    /* hide acitivity indicator */
+    func stopActivityIndicator() {
+        activityIndicator.stopAnimating()
+    }
+    
+    /* Display url in external Safari browser. */
+    func showUrlInExternalWebKitBrowser(url: String) {
+        if let requestUrl = NSURL(string: url) {
+            UIApplication.sharedApplication().openURL(requestUrl)
+        }
+    }
+    
+    /* Display url in an embeded webkit browser in the navigation controller. */
+    func showUrlInEmbeddedBrowser(url: String) {
+        var storyboard = UIStoryboard (name: "Main", bundle: nil)
+        var controller = storyboard.instantiateViewControllerWithIdentifier("WebViewStoryboardID") as! WebViewController
+        controller.url = url
+        self.navigationController?.pushViewController(controller, animated: true)
         
     }
+    
 }
 

@@ -24,6 +24,9 @@
 		9E923C9E1B6441DB00F2B0A7 /* StudentLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E923C9D1B6441DB00F2B0A7 /* StudentLocation.swift */; };
 		9E923CA01B65AE3A00F2B0A7 /* OTMError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E923C9F1B65AE3A00F2B0A7 /* OTMError.swift */; };
 		9E923CA31B65D3AE00F2B0A7 /* StudentLocations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E923CA21B65D3AE00F2B0A7 /* StudentLocations.swift */; };
+		9ED4424D1B8D5F810092B482 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED4424C1B8D5F810092B482 /* WebViewController.swift */; };
+		9ED442501B9124510092B482 /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED4424F1B9124510092B482 /* CollectionViewController.swift */; };
+		9ED442521B91358C0092B482 /* CollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED442511B91358C0092B482 /* CollectionCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +62,9 @@
 		9E923C9D1B6441DB00F2B0A7 /* StudentLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentLocation.swift; sourceTree = "<group>"; };
 		9E923C9F1B65AE3A00F2B0A7 /* OTMError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMError.swift; sourceTree = "<group>"; };
 		9E923CA21B65D3AE00F2B0A7 /* StudentLocations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentLocations.swift; sourceTree = "<group>"; };
+		9ED4424C1B8D5F810092B482 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		9ED4424F1B9124510092B482 /* CollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
+		9ED442511B91358C0092B482 /* CollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +119,7 @@
 				9E41616E1B61855D009A9D30 /* LaunchScreen.xib */,
 				9E4161611B61855D009A9D30 /* Supporting Files */,
 				9E66A8521B825A4C00855180 /* FacebookBridgingHeader.h */,
+				9ED442511B91358C0092B482 /* CollectionCell.swift */,
 			);
 			path = OnTheMap;
 			sourceTree = "<group>";
@@ -173,10 +180,12 @@
 		9E923CA41B65DDEE00F2B0A7 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				9E4161851B618A63009A9D30 /* LoginViewController.swift */,
-				9E4161671B61855D009A9D30 /* ListViewController.swift */,
-				9E4161651B61855D009A9D30 /* MapViewController.swift */,
+				9ED4424F1B9124510092B482 /* CollectionViewController.swift */,
 				9E4161871B6193F5009A9D30 /* InfoPostingProvideLocationViewController.swift */,
+				9E4161671B61855D009A9D30 /* ListViewController.swift */,
+				9E4161851B618A63009A9D30 /* LoginViewController.swift */,
+				9E4161651B61855D009A9D30 /* MapViewController.swift */,
+				9ED4424C1B8D5F810092B482 /* WebViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -282,6 +291,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9ED442501B9124510092B482 /* CollectionViewController.swift in Sources */,
 				9E41618F1B62BDEB009A9D30 /* RESTConstants.swift in Sources */,
 				9E4161921B62CBD2009A9D30 /* RESTConvenience.swift in Sources */,
 				9E4161881B6193F5009A9D30 /* InfoPostingProvideLocationViewController.swift in Sources */,
@@ -289,8 +299,10 @@
 				9E4161861B618A63009A9D30 /* LoginViewController.swift in Sources */,
 				9E4161681B61855D009A9D30 /* ListViewController.swift in Sources */,
 				9E4161641B61855D009A9D30 /* AppDelegate.swift in Sources */,
+				9ED4424D1B8D5F810092B482 /* WebViewController.swift in Sources */,
 				9E923CA31B65D3AE00F2B0A7 /* StudentLocations.swift in Sources */,
 				9E923C9E1B6441DB00F2B0A7 /* StudentLocation.swift in Sources */,
+				9ED442521B91358C0092B482 /* CollectionCell.swift in Sources */,
 				9E923CA01B65AE3A00F2B0A7 /* OTMError.swift in Sources */,
 				9E4161661B61855D009A9D30 /* MapViewController.swift in Sources */,
 			);

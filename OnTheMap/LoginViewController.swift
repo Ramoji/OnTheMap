@@ -97,6 +97,9 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                     // get student locations from Parse
                     self.studentLocations.reset()
                     self.studentLocations.getStudentLocations(0) { success, errorString in
+                        dispatch_async(dispatch_get_main_queue()) {
+                            self.stopActivityIndicator()
+                        }
                         if success == false {
                             if let errorString = errorString {
                                 OTMError(viewController:self).displayErrorAlertView("Error retrieving Locations", message: errorString)
@@ -110,12 +113,16 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                             self.presentMapController()
                         }
                     }
+                    
+                    self.presentMapController()
                 } else {
                     self.appDelegate.loggedIn = false
-                    OTMError(viewController:self).displayErrorAlertView("Login Error", message: error!.localizedDescription)
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.stopActivityIndicator()
+                        self.parseLoginError(error!)
+                        OTMError(viewController:self).displayErrorAlertView("Login Error", message: error!.localizedDescription)
+                    }
                 }
-                
-                self.presentMapController()
             }
         }
     }
@@ -217,5 +224,37 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         //let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let fbToken = FBSDKAccessToken.currentAccessToken()
         self.appDelegate.loggedInUser?.uniqueKey = fbToken.userID
+    }
+    
+    /* Identify the UITextView responsible for the error, and shake the appropriate UITextView. */
+    func parseLoginError(error: NSError) {
+        let message = error.localizedDescription
+        
+        // Handle case where the username or password was not supplied
+        if error.code == 400 {
+            //if message.lowercaseString.rangeOfString("Error 400") != nil && message.lowercaseString.rangeOfString("Missing parameter") != nil {
+            if message.lowercaseString.rangeOfString("username") != nil {
+                self.shake(self.emailTextField)
+            } else if message.lowercaseString.rangeOfString("password") != nil {
+                self.shake(self.passwordTextField)
+            }
+        }
+            // Handle case where username or password was incorrect
+        else if error.code == 403 &&
+            message.lowercaseString.rangeOfString("Account not found") != nil || message.lowercaseString.rangeOfString("invalid credentials") != nil {
+                self.shake(self.emailTextField)
+                self.shake(self.passwordTextField)
+        }
+    }
+    
+    /* Create a shake animation for the specified textField. */
+    func shake(textField: UITextField) {
+        let shakeAnimation = CABasicAnimation(keyPath: "position")
+        shakeAnimation.duration = 0.1
+        shakeAnimation.repeatCount = 3
+        shakeAnimation.autoreverses = true
+        shakeAnimation.fromValue = NSValue(CGPoint: CGPointMake(textField.center.x - 7, textField.center.y - 2))
+        shakeAnimation.toValue = NSValue(CGPoint: CGPointMake(textField.center.x + 7, textField.center.y + 2))
+        textField.layer.addAnimation(shakeAnimation, forKey: "position")
     }
 }

@@ -1,17 +1,19 @@
 //
-//  ListViewController.swift
+//  CollectionViewController.swift
 //  OnTheMap
 //
-//  Created by john bateman on 7/23/15.
+//  Created by john bateman on 8/28/15.
 //  Copyright (c) 2015 John Bateman. All rights reserved.
 //
-//  This file contains the ListViewController which displays a list of StudentLocation objects in a ListView. The user can select a row to launch the Safari Browser to display the URL of the StudentLocation associated with the selected row.
+// This file implements the LoginViewController which allows the user to create an account on Udacity, Login to a session on Udacity, or Login to Facebook on the device.
 
 import UIKit
 
-class ListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+let reuseIdentifier = "OTMCollectionCellID"
 
-    @IBOutlet var tableView: UITableView!
+class CollectionViewController: UICollectionViewController, UICollectionViewDelegate {
+
+    @IBOutlet weak var theCollectionView: UICollectionView!
     
     var appDelegate: AppDelegate!
     
@@ -19,9 +21,19 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     let studentLocations = StudentLocations.sharedInstance()
     
     var activityIndicator : UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRectMake(0, 0, 50, 50)) as UIActivityIndicatorView
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // Uncomment the following line to preserve selection between presentations
+        // self.clearsSelectionOnViewWillAppear = false
+
+        // Register cell classes
+        //self.collectionView!.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+
+        // setup the collectionview datasource & delegate
+        theCollectionView.dataSource = self
+        theCollectionView.delegate = self
         
         // Additional bar button items
         let refreshButton = UIBarButtonItem(barButtonSystemItem: .Refresh, target: self, action: "onRefreshButtonTap")
@@ -30,6 +42,11 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         // get a reference to the app delegate
         appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -46,11 +63,86 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    /*
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        // Get the new view controller using [segue destinationViewController].
+        // Pass the selected object to the new view controller.
+    }
+    */
+
+    // MARK: UICollectionViewDataSource
+
+    /* return the section count */
+    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+        return 1
     }
 
+    /* return the item count */
+    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return studentLocations.studentLocations.count
+    }
+
+    /* return a cell for the requested item */
+    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! CollectionCell
+    
+        let studentLocation = studentLocations.studentLocations[indexPath.row]
+        
+        // set the cell text
+        var firstName = studentLocation.firstName
+        var lastName = studentLocation.lastName
+        cell.label!.text = firstName + " " + lastName
+        
+        println("cell label = \(cell.label!.text)")
+        
+        return cell
+    }
+
+    
+    // MARK: UICollectionViewDelegate
+
+    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        
+        // open student's url in Safari browser
+        let studentLocation = studentLocations.studentLocations[indexPath.row]
+        let url = studentLocation.mediaURL
+        
+        showUrlInEmbeddedBrowser(url)
+    }
+
+    /*
+    // Uncomment this method to specify if the specified item should be highlighted during tracking
+    override func collectionView(collectionView: UICollectionView, shouldHighlightItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    */
+
+    /*
+    // Uncomment this method to specify if the specified item should be selected
+    override func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    */
+
+    /*
+    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
+    override func collectionView(collectionView: UICollectionView, shouldShowMenuForItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return false
+    }
+
+    override func collectionView(collectionView: UICollectionView, canPerformAction action: Selector, forItemAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) -> Bool {
+        return false
+    }
+
+    override func collectionView(collectionView: UICollectionView, performAction action: Selector, forItemAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) {
+    
+    }
+    */
+    
     
     // MARK: button handlers
     
@@ -106,43 +198,6 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
-    
-    // MARK: Table View Data Source
-    
-    /* return the row count */
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return studentLocations.studentLocations.count
-    }
-    
-    /* return a cell for the requested row */
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCellWithIdentifier("ListViewCellID") as! UITableViewCell
-        
-        let studentLocation = studentLocations.studentLocations[indexPath.row]
-        
-        // set the cell text
-        var firstName = studentLocation.firstName
-        var lastName = studentLocation.lastName
-        cell.textLabel!.text = firstName + " " + lastName
-        
-        return cell
-    }
-    
-    
-    // MARK: Table View Delegate
-    
-    /* User selected a row. Open the associated url stored in studentLocation in the Safari browser. */
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
-        // open student's url in Safari browser
-        let studentLocation = studentLocations.studentLocations[indexPath.row]
-        let url = studentLocation.mediaURL
-        
-        showUrlInEmbeddedBrowser(url)
-    }
-
-    
     // MARK: helper functions
     
     /* Modally present the Login view controller */
@@ -159,9 +214,10 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.presentViewController(controller, animated: true, completion: nil);
     }
     
-    /* Received a notification that studentLocations have been updated with new data from Parse. Update the rows in the list. */
+    /* Received a notification that studentLocations have been updated with new data from Parse. Update the items in the collection view. */
     func onStudentLocationsUpdate() {
-        self.tableView.reloadData()
+        // Provoke the collection view data source protocol methods to be called.
+        self.theCollectionView.reloadData()
     }
     
     /* Display url in external Safari browser. */
@@ -193,5 +249,5 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     func stopActivityIndicator() {
         activityIndicator.stopAnimating()
     }
-}
 
+}
