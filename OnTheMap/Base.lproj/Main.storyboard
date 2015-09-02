@@ -255,6 +255,125 @@
             </objects>
             <point key="canvasLocation" x="1562" y="-320"/>
         </scene>
+        <!--Web Search View Controller-->
+        <scene sceneID="W8H-vk-9We">
+            <objects>
+                <viewController storyboardIdentifier="WebSearchStoryboardID" id="1Q5-Lm-bl4" customClass="WebSearchViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="aMT-Xz-PA0"/>
+                        <viewControllerLayoutGuide type="bottom" id="sjB-Ew-RX2"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="aOn-Ot-JPT">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fYe-zj-Nzo">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <subviews>
+                                    <searchBar contentMode="redraw" searchBarStyle="minimal" translatesAutoresizingMaskIntoConstraints="NO" id="Ibe-3G-amR">
+                                        <rect key="frame" x="0.0" y="0.0" width="570" height="44"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="Yzn-7L-huW"/>
+                                        </constraints>
+                                        <textInputTraits key="textInputTraits" keyboardType="URL"/>
+                                    </searchBar>
+                                    <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GLn-SE-NXU">
+                                        <rect key="frame" x="0.0" y="44" width="600" height="556"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </webView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aIm-TL-q6I">
+                                        <rect key="frame" x="570" y="9" width="28" height="30"/>
+                                        <state key="normal" title="Go">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="onGoButtonTap:" destination="1Q5-Lm-bl4" eventType="touchUpInside" id="w0i-YM-M1p"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="GLn-SE-NXU" secondAttribute="trailing" id="475-ah-8Jp"/>
+                                    <constraint firstAttribute="trailing" secondItem="aIm-TL-q6I" secondAttribute="trailing" constant="2" id="8N3-cs-JVi"/>
+                                    <constraint firstItem="Ibe-3G-amR" firstAttribute="top" secondItem="fYe-zj-Nzo" secondAttribute="top" id="NnI-1i-Aug"/>
+                                    <constraint firstItem="aIm-TL-q6I" firstAttribute="leading" secondItem="Ibe-3G-amR" secondAttribute="trailing" id="QVd-wq-KaN"/>
+                                    <constraint firstAttribute="centerX" secondItem="GLn-SE-NXU" secondAttribute="centerX" id="X0X-2W-zuo"/>
+                                    <constraint firstItem="aIm-TL-q6I" firstAttribute="centerY" secondItem="Ibe-3G-amR" secondAttribute="centerY" constant="2" id="YeO-Se-fZE"/>
+                                    <constraint firstAttribute="trailing" secondItem="Ibe-3G-amR" secondAttribute="trailing" constant="30" id="adb-tf-vnL"/>
+                                    <constraint firstAttribute="trailing" secondItem="aIm-TL-q6I" secondAttribute="trailing" id="cHy-Qi-nZ6"/>
+                                    <constraint firstItem="Ibe-3G-amR" firstAttribute="leading" secondItem="fYe-zj-Nzo" secondAttribute="leading" id="eA5-m2-5js"/>
+                                    <constraint firstItem="GLn-SE-NXU" firstAttribute="top" secondItem="Ibe-3G-amR" secondAttribute="bottom" id="nKn-Ue-iUZ"/>
+                                    <constraint firstItem="GLn-SE-NXU" firstAttribute="leading" secondItem="fYe-zj-Nzo" secondAttribute="leading" id="qDn-mM-xE1"/>
+                                    <constraint firstAttribute="bottom" secondItem="GLn-SE-NXU" secondAttribute="bottom" id="tS8-yc-duk"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="cHy-Qi-nZ6"/>
+                                    </mask>
+                                </variation>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Czf-ue-GNG">
+                                <rect key="frame" x="0.0" y="485" width="600" height="115"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ht4-Gi-lXA">
+                                        <rect key="frame" x="200" y="43" width="200" height="35"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="200" id="KYU-mT-3eU"/>
+                                        </constraints>
+                                        <state key="normal" title="Save Link">
+                                            <color key="titleColor" red="0.18039215689999999" green="0.25882352939999997" blue="0.5450980392" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="7"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="onSaveButton:" destination="1Q5-Lm-bl4" eventType="touchUpInside" id="Ak0-p4-X6t"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="ht4-Gi-lXA" firstAttribute="top" secondItem="Czf-ue-GNG" secondAttribute="top" constant="43" id="5vm-RF-hKT"/>
+                                    <constraint firstAttribute="centerX" secondItem="ht4-Gi-lXA" secondAttribute="centerX" id="JDo-2h-B9D"/>
+                                    <constraint firstAttribute="height" constant="115" id="eSf-Cm-aO2"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="fYe-zj-Nzo" firstAttribute="leading" secondItem="aOn-Ot-JPT" secondAttribute="leading" id="38s-uh-8h0"/>
+                            <constraint firstAttribute="trailing" secondItem="fYe-zj-Nzo" secondAttribute="trailing" id="4O2-Mu-9w5"/>
+                            <constraint firstItem="Czf-ue-GNG" firstAttribute="top" secondItem="fYe-zj-Nzo" secondAttribute="bottom" id="6pW-9Y-yYi"/>
+                            <constraint firstItem="fYe-zj-Nzo" firstAttribute="top" secondItem="aOn-Ot-JPT" secondAttribute="top" id="BrP-Av-F6I"/>
+                            <constraint firstItem="Czf-ue-GNG" firstAttribute="leading" secondItem="aOn-Ot-JPT" secondAttribute="leading" id="EHB-9O-ygF"/>
+                            <constraint firstAttribute="bottom" secondItem="Czf-ue-GNG" secondAttribute="bottom" id="OvD-74-MhT"/>
+                            <constraint firstAttribute="centerX" secondItem="fYe-zj-Nzo" secondAttribute="centerX" id="ePY-EL-J2D"/>
+                            <constraint firstItem="Czf-ue-GNG" firstAttribute="top" secondItem="fYe-zj-Nzo" secondAttribute="bottom" id="gHO-C1-0D1"/>
+                            <constraint firstAttribute="trailing" secondItem="Czf-ue-GNG" secondAttribute="trailing" id="sC8-lf-qUc"/>
+                            <constraint firstItem="sjB-Ew-RX2" firstAttribute="top" secondItem="fYe-zj-Nzo" secondAttribute="bottom" id="tBK-JV-Q47"/>
+                            <constraint firstAttribute="centerX" secondItem="Czf-ue-GNG" secondAttribute="centerX" id="uJ8-zp-ny9"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="6pW-9Y-yYi"/>
+                                <exclude reference="gHO-C1-0D1"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <connections>
+                        <outlet property="bottomView" destination="Czf-ue-GNG" id="AlP-xL-J4F"/>
+                        <outlet property="searchBar" destination="Ibe-3G-amR" id="ckU-P3-04o"/>
+                        <outlet property="webView" destination="GLn-SE-NXU" id="K95-0w-nX1"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zHc-VZ-1hd" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2246" y="-1846"/>
+        </scene>
         <!--Web View Controller-->
         <scene sceneID="HPe-9M-E9L">
             <objects>
@@ -275,7 +394,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9C8-97-tww" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3834" y="-838"/>
+            <point key="canvasLocation" x="2272" y="-836"/>
         </scene>
         <!--On The Map-->
         <scene sceneID="wg7-f3-ORb">
@@ -375,6 +494,16 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nTu-bs-ivQ">
+                                        <rect key="frame" x="8" y="15" width="60" height="30"/>
+                                        <state key="normal" title="Browse">
+                                            <color key="titleColor" red="0.01176470588" green="0.1019607843" blue="0.36470588240000001" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="onBrowseButtonTap:" destination="tP1-XH-7NC" eventType="touchUpInside" id="W1d-yG-QL2"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -542,6 +671,7 @@
                     </view>
                     <connections>
                         <outlet property="bottomView" destination="gxk-gP-C8O" id="9K7-B3-v7j"/>
+                        <outlet property="browseButton" destination="nTu-bs-ivQ" id="Bdb-G6-ivn"/>
                         <outlet property="cancelButton" destination="Glb-yZ-AVx" id="mOY-qU-8xP"/>
                         <outlet property="constraintMapViewBottomToSuperViewBottom" destination="u5v-eR-Fgf" id="upf-ee-kRH"/>
                         <outlet property="enterLinkToShareTextField" destination="k3S-l3-bfU" id="Xic-35-mVX"/>

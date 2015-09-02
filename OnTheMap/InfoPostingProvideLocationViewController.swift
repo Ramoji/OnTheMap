@@ -15,7 +15,7 @@ let LOCATION_VIEW_STATE = 1 // location text field, find on map button
 let MAP_VIEW_STATE = 2      // map view, submit button, url text field
 let BUSY_VIEW_STATE = 3     // set alpha on subviews to indicate busy state
 
-class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate {
+class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, UIWebViewDelegate {
 
     var appDelegate: AppDelegate!
     var tapRecognizer: UITapGestureRecognizer? = nil
@@ -30,6 +30,7 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var enterLinkToShareTextField: UITextField!
+    @IBOutlet weak var browseButton: UIButton!
    
     // constraints
     @IBOutlet weak var constraintMapViewBottomToSuperViewBottom: NSLayoutConstraint!
@@ -76,8 +77,20 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
         // Dispose of any resources that can be recreated.
     }
 
+    /* User cancelled this view controller. Dismiss it and show parent. */
     @IBAction func onCancelButtonTap(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    /* User selected Browse button. Display an embedded webkit browser view with search. Show the user's selected url. If no url is selected display the default www.google.com url. */
+    @IBAction func onBrowseButtonTap(sender: AnyObject) {
+        var url = "http://www.google.com"
+        if let userLink = enterLinkToShareTextField.text {
+            if userLink != "" {
+                url = userLink
+            }
+        }
+        showEmbeddedBrowserWithSearch(url)
     }
     
     /* Attempt to forward geocode the address entered by the user. If that works drop a pin on the map. */
@@ -127,7 +140,6 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
             uniqueKey = loggedInUser.uniqueKey
         }
         
-        // TODO - cleanup comments >
         // Create a placeDictionary with the user's Udacity login credentials and the url the user just entered on this screen.
         var placeDictionary: [String: AnyObject] = [
             "uniqueKey" : uniqueKey,
@@ -222,6 +234,7 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
             findOnMapButton.hidden = false
             whereAreYouStudyingTodayLabel.hidden = false
             enterLinkToShareTextField.hidden = true
+            browseButton.hidden = true
             
         case MAP_VIEW_STATE:
             // map. Submit button.
@@ -231,6 +244,7 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
             findOnMapButton.hidden = true
             whereAreYouStudyingTodayLabel.hidden = true
             enterLinkToShareTextField.hidden = false
+            browseButton.hidden = false
             
             topView.backgroundColor = UIColor(red: 91/255, green: 134/255, blue: 237/255, alpha: 1)
             bottomView.backgroundColor = UIColor(white: 1, alpha: 0.3)
@@ -248,6 +262,7 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
             findOnMapButton.hidden = false
             whereAreYouStudyingTodayLabel.hidden = false
             enterLinkToShareTextField.hidden = true
+            browseButton.hidden = true
             
             topView.backgroundColor = UIColor.clearColor()
         }
@@ -396,5 +411,35 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
     // User tapped somewhere on the view. End editing.
     func handleSingleTap(recognizer: UITapGestureRecognizer) {
         self.view.endEditing(true)
+    }
+    
+    /* Display url in an embeded webkit browser with a search bar in the navigation controller. */
+    func showEmbeddedBrowserWithSearch(url: String) {
+        var storyboard = UIStoryboard (name: "Main", bundle: nil)
+        var controller = storyboard.instantiateViewControllerWithIdentifier("WebSearchStoryboardID") as! WebSearchViewController
+        controller.initialURL = url
+        controller.webViewDelegate = self
+        self.presentViewController(controller, animated: true, completion: nil);
+    }
+    
+//    /* Create a UIWebView the size of the screen and set it's delegate to this view controller. */
+//    func showWebView(url: String?) {
+//        let webView:UIWebView = UIWebView(frame: CGRectMake(0, 0, UIScreen.mainScreen().bounds.width, UIScreen.mainScreen().bounds.height))
+//        webView.delegate = self
+//        if let url = url {
+//            webView.loadRequest(NSURLRequest(URL: NSURL(string: url)!))
+//            self.view.addSubview(webView)
+//        }
+//    }
+//    
+//    
+    // MARK: UIWebViewDelegate methods
+    
+    /* Called every time the URL changes in the UIWebView. This function keeps the LinkToShare text field in the UI updated with each change to the web page. */
+    func webViewDidFinishLoad(webView: UIWebView) {
+        if let currentURL = webView.request?.URL?.absoluteString {
+            println("The current url is \(currentURL)")
+            enterLinkToShareTextField.text = currentURL
+        }
     }
 }

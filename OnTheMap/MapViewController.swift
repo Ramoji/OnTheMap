@@ -37,6 +37,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         // set the mapView delegate to this view controller
         mapView.delegate = self
+        
+        // Set the region to North America
+        setMapRegionToNorthAmerica()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -280,6 +283,19 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         controller.url = url
         self.navigationController?.pushViewController(controller, animated: true)
         
+    }
+    
+    /* Set the mapview to show north america. */
+    func setMapRegionToNorthAmerica() {
+        // center of U.S.
+        let location = CLLocationCoordinate2D(
+            latitude: 49.50, // 39.50,
+            longitude: -98.35
+        )
+        // visible span in degrees lat, lon
+        let span = MKCoordinateSpanMake(70, 30)
+        let region = MKCoordinateRegion(center: location, span: span)
+        mapView.setRegion(region, animated: true)
     }
     
 }
