@@ -19,6 +19,7 @@ struct StudentLocation {
     var mediaURL = ""   // url associated with the object
     var latitude = 0.0  // gps coordinate for latitude
     var longitude = 0.0 // gps coordinate for longitude
+    var updatedAt = ""  // last updated date
     
     /* designated initializer */
     init() {
@@ -59,6 +60,10 @@ struct StudentLocation {
         if let lon = dictionary["longitude"] as? Double {
             longitude = lon
         }
+        
+        if let date = dictionary["updatedAt"] as? String {
+            updatedAt = date
+        }
     }
 }
 
@@ -71,5 +76,6 @@ struct StudentLocation {
         "mediaURL" : "https://udacity.com",
         "latitude" : 37.4955,
         "longitude" : -122.2668
+        "updatedAt" : "2015-09-04T12:58:07.731Z"
     }
 */

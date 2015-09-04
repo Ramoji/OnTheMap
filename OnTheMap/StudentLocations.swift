@@ -64,6 +64,9 @@ class StudentLocations {
                             // recursive call
                             self.getStudentLocations(toSkip) { success, errorString in
                                 if success == false {
+                                    // sort the retrieved array
+                                    self.sortList()
+                                    
                                     // error retrieving locations. Some but not all locations were retrieved.
                                     println("Error retrieving locations in recursive call to getStudentLocations() in StudentLocations.swift.")
                                     
@@ -74,10 +77,16 @@ class StudentLocations {
                                     completion(result:true, errorString: nil)
                                 } else {
                                     // successfully retrieved locations, and already added to self.studentLocations.
+                                    
+                                    // sort the retrieved array
+                                    self.sortList()
                                 }
                             }
                         } else {
                             // All items have been retrieved. Now send notification and call completion handler.
+                            
+                            // sort the retrieved array
+                            self.sortList()
                             
                             // Send a notification indicating new student location data has been obtained from Parse.
                             NSNotificationCenter.defaultCenter().postNotificationName(studentLocationsUpdateNotificationKey, object: self)
@@ -97,6 +106,20 @@ class StudentLocations {
                 println("error getStudentLocations()")
                 completion(result:false, errorString: errorString)
             }
+        }
+    }
+    
+    /* sort list by date of last update */
+    func sortList() {
+        self.studentLocations.sort {
+            $0.updatedAt.localizedCaseInsensitiveCompare($1.updatedAt) == NSComparisonResult.OrderedDescending
+        }
+    }
+
+    /* debug helper function */
+    func printList() {
+        for location in studentLocations {
+            println("\(location.firstName) \(location.lastName) \(location.updatedAt)")
         }
     }
 }

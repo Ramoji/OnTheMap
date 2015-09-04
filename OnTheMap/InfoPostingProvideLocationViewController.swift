@@ -140,6 +140,13 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
             uniqueKey = loggedInUser.uniqueKey
         }
         
+        // date
+        let date = NSDate()
+        var dateFormatter = NSDateFormatter()
+        dateFormatter.timeZone = NSTimeZone.localTimeZone()
+        dateFormatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'" // "2015-09-04T12:58:07.731Z"
+        var dateString = dateFormatter.stringFromDate(date)
+        
         // Create a placeDictionary with the user's Udacity login credentials and the url the user just entered on this screen.
         var placeDictionary: [String: AnyObject] = [
             "uniqueKey" : uniqueKey,
@@ -147,7 +154,8 @@ class InfoPostingProvideLocationViewController: UIViewController, MKMapViewDeleg
             "lastName" : self.appDelegate.loggedInUser!.lastName,
             "mediaURL" : enterLinkToShareTextField.text,
             "latitude" : placemark.location.coordinate.latitude,
-            "longitude" : placemark.location.coordinate.longitude
+            "longitude" : placemark.location.coordinate.longitude,
+            "updatedAt" : dateString
         ]
         var mapString = ""
         if let city = placemark.addressDictionary["City"] as? String {
