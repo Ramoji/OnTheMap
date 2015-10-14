@@ -9,6 +9,7 @@ This iOS 8 Swift app uses Udacity login REST api and Parse REST api to acquire a
 * Asynchronous requests to Parse REST API in background queue in network friendly manner using recursion.
 * Separation of REST API calls in model classes to maintain MVC and keep view controllers lightweight.
 * Common NSURLSession networking code refactored into a separate class to keep the code DRY.
+* JSON Parsing of http responses.
 * Table view embedded in a view controller using UITableView, UITableViewDelegate and UITableViewDataSource protocols.
 * Collection view implemented with UICollectionViewController, UICollectionViewDelegate protocol.
 * MapKit
