@@ -14,6 +14,7 @@ This iOS 8 Swift app uses Udacity login REST api and Parse REST api to acquire a
 * MapKit
 * Singleton pattern and NSNotification used to decouple acquisition of model data from view controllers while keeping the latter updated.
 * UIWebView used to display a url associated with a student object. The UIWebViewDelegate protocol is used to update the source view controller as the user navigates in the destination web view.
+* Navigation is implemented using UINavigationController and UITabBarController.
 
 
 ## Screenshots
