@@ -1,6 +1,12 @@
 # OnTheMap
 This iOS 8 Swift app uses Udacity login REST api and Parse REST api to acquire a list of student location metadata and display it on a map.
 
+## Reviewer Comments
+* "Exceeds Specification"
+* "Your shaking text fields are amazing!"
+* "Amazing Job! There's also a custom in app web browser using a web view"
+* "Awesome! Not only the activity indicator displays during geocoding and stops when geocoding has finished but also the view is greyed during geocoding!!"
+
 ## Implementation Highlights
 
 * MVC design pattern with strict separation between model and view.
